@@ -10,6 +10,7 @@ import '../controllers/home_controller.dart';
 class HomeView extends GetView<HomeController> {
   @override
   Widget build(BuildContext context) {
+    Get.put(HomeController());
     return Scaffold(
         body: PageView(
           controller: controller.pageController,

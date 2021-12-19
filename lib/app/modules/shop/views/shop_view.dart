@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/orders/views/orders_view.dart';
+import 'package:sabzee/app/modules/shop/widgets/shop_item_card_modal_bottom_sheet.dart';
 
 import '../controllers/shop_controller.dart';
 
@@ -150,96 +151,21 @@ class ShopView extends GetView<ShopController> {
                         Container(
                             height: Get.height * 0.23,
                             width: Get.width,
+                            color: Colors.amber,
                             child: const Image(
                               image: NetworkImage(
                                   'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
                             )),
                         Text(controller.mappedItems.elementAt(index).name),
                         Text((controller.mappedItems
-                                        .elementAt(index)
-                                        .variants
-                                        .length /
-                                    2)
+                                    .elementAt(index)
+                                    .variants
+                                    .length)
                                 .toString() +
                             " variants available"),
                         TextButton(
                           onPressed: () {
-                            showModalBottomSheet<dynamic>(
-                                isScrollControlled: true,
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return Container(
-                                    height: Get.height * 0.7,
-                                    width: Get.width * 0.9,
-                                    color: Colors.amber,
-                                    child: Column(
-                                      children: [
-                                        const Image(
-                                          image: NetworkImage(
-                                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                                        ),
-                                        Text(controller.mappedItems
-                                            .elementAt(index)
-                                            .name),
-                                        Text("Choose one"),
-                                        Container(
-                                          child: Expanded(
-                                            child: ListView.builder(
-                                                itemCount: controller
-                                                    .mappedItems
-                                                    .elementAt(index)
-                                                    .variants
-                                                    .length,
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index2) {
-                                                  return index2.isEven
-                                                      ? Container(
-                                                          width:
-                                                              Get.width * 0.5,
-                                                          color: Colors.amber,
-                                                          child: Row(
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment
-                                                                    .spaceAround,
-                                                            children: [
-                                                              Text(controller
-                                                                  .mappedItems
-                                                                  .elementAt(
-                                                                      index)
-                                                                  .variants[
-                                                                      index2]
-                                                                  .toString()),
-                                                              Text(controller
-                                                                  .mappedItems
-                                                                  .elementAt(
-                                                                      index)
-                                                                  .variants[
-                                                                      index2 +
-                                                                          1]
-                                                                  .toString())
-                                                            ],
-                                                          ),
-                                                        )
-                                                      : Container();
-                                                }),
-                                          ),
-                                          //         Column(
-                                          //   children: [
-                                          //     ...controller.mappedItems
-                                          //         .elementAt(index)
-                                          //         .variants
-                                          //         .map((e) => e.runtimeType ==
-                                          //                 String
-                                          //             ? Container(child: Text(e))
-                                          //             : Text(""))
-                                          //   ],
-                                          // )
-                                        )
-                                      ],
-                                    ),
-                                  );
-                                });
+                            customModalBottomSheet(context, index);
                           },
                           child: Text("Add"),
                         )

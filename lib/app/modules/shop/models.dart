@@ -1,12 +1,25 @@
+class SelectedItem {
+  late String name;
+  late List<Selection> selections;
+
+  SelectedItem({required this.name, required this.selections});
+}
+
 class MenuItem {
   late String name;
-  late List<dynamic> variants;
+  late List<Variant> variants;
 
   MenuItem({required this.name, required this.variants});
 
   MenuItem.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    variants = json['variants'].cast<String>();
+    print(json['variants']);
+    if (json['variants'] != null) {
+      variants = <Variant>[];
+      json['variants'].forEach((v) {
+        variants.add(new Variant.fromJson(v));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
@@ -17,25 +30,127 @@ class MenuItem {
   }
 }
 
+class Selection {
+  late String name;
+  late String rate;
+  late int qty;
+
+  Selection({required this.name, required this.rate, required this.qty});
+  Selection.fromVariant({required Variant variant}) {
+    this.name = variant.name;
+    this.rate = variant.rate;
+    this.qty = 0;
+  }
+}
+
+class Variant {
+  late String name;
+  late String rate;
+
+  Variant({required this.name, required this.rate});
+
+  Variant.fromJson(Map<String, dynamic> json) {
+    name = json['name'];
+    rate = json['rate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['name'] = this.name;
+    data['rate'] = this.rate;
+    return data;
+  }
+}
+
 const items = [
   {
     "name": "BitterGourd",
-    "variants": ["250 gm", "50", "500 gm", "85", "1kg", "150"],
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
   },
   {
-    "name": "Lauki",
-    "variants": ["250 gm", "60", "500 gm", "110", "1kg", "200"],
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
   },
   {
-    "name": "Onion",
-    "variants": ["500 gm", "25", "1kg", "45", "2kg", "85"],
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
   },
   {
-    "name": "Dhaniya",
-    "variants": ["100 gm", 15, "200 gm", 25, "500gm", 50],
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
   },
   {
-    "name": "Tomato",
-    "variants": ["500 gm", 35, "1kg", 60],
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
+  },
+  {
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
+  },
+  {
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
+  },
+  {
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
+  },
+  {
+    "name": "BitterGourd",
+    "variants": [
+      {"name": "250 gm", "rate": "50"},
+      {"name": "500 gm", "rate": "85"},
+      {"name": "1kg", "rate": "150"}
+    ],
   },
 ];
+
+getSelectedItemFromMenuItem(MenuItem menuItem) {
+  List<Selection> selections = [];
+  menuItem.variants.forEach((element) {
+    selections.add(Selection.fromVariant(variant: element));
+  });
+  return new SelectedItem(
+    name: menuItem.name,
+    selections: selections,
+  );
+}
+
+class Cart {
+  late List<SelectedItem> items;
+  late int amount;
+
+  Cart({required this.items, required this.amount});
+}
