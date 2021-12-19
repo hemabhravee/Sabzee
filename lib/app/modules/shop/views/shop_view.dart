@@ -155,19 +155,89 @@ class ShopView extends GetView<ShopController> {
                                   'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
                             )),
                         Text(controller.mappedItems.elementAt(index).name),
-                        Text(controller.mappedItems
-                                .elementAt(index)
-                                .variants
-                                .length
+                        Text((controller.mappedItems
+                                        .elementAt(index)
+                                        .variants
+                                        .length /
+                                    2)
                                 .toString() +
                             " variants available"),
                         TextButton(
                           onPressed: () {
-                            showModalBottomSheet<void>(
+                            showModalBottomSheet<dynamic>(
+                                isScrollControlled: true,
                                 context: context,
                                 builder: (BuildContext context) {
                                   return Container(
-                                    child: Text("Modal"),
+                                    height: Get.height * 0.7,
+                                    width: Get.width * 0.9,
+                                    color: Colors.amber,
+                                    child: Column(
+                                      children: [
+                                        const Image(
+                                          image: NetworkImage(
+                                              'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+                                        ),
+                                        Text(controller.mappedItems
+                                            .elementAt(index)
+                                            .name),
+                                        Text("Choose one"),
+                                        Container(
+                                          child: Expanded(
+                                            child: ListView.builder(
+                                                itemCount: controller
+                                                    .mappedItems
+                                                    .elementAt(index)
+                                                    .variants
+                                                    .length,
+                                                itemBuilder:
+                                                    (BuildContext context,
+                                                        int index2) {
+                                                  return index2.isEven
+                                                      ? Container(
+                                                          width:
+                                                              Get.width * 0.5,
+                                                          color: Colors.amber,
+                                                          child: Row(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment
+                                                                    .spaceAround,
+                                                            children: [
+                                                              Text(controller
+                                                                  .mappedItems
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .variants[
+                                                                      index2]
+                                                                  .toString()),
+                                                              Text(controller
+                                                                  .mappedItems
+                                                                  .elementAt(
+                                                                      index)
+                                                                  .variants[
+                                                                      index2 +
+                                                                          1]
+                                                                  .toString())
+                                                            ],
+                                                          ),
+                                                        )
+                                                      : Container();
+                                                }),
+                                          ),
+                                          //         Column(
+                                          //   children: [
+                                          //     ...controller.mappedItems
+                                          //         .elementAt(index)
+                                          //         .variants
+                                          //         .map((e) => e.runtimeType ==
+                                          //                 String
+                                          //             ? Container(child: Text(e))
+                                          //             : Text(""))
+                                          //   ],
+                                          // )
+                                        )
+                                      ],
+                                    ),
                                   );
                                 });
                           },

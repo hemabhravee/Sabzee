@@ -1,21 +1,18 @@
 class MenuItem {
   late String name;
-  late List<String> variants;
-  late List<int> prices;
+  late List<dynamic> variants;
 
-  MenuItem({required this.name, required this.variants, required this.prices});
+  MenuItem({required this.name, required this.variants});
 
   MenuItem.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     variants = json['variants'].cast<String>();
-    prices = json['prices'].cast<int>();
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['variants'] = this.variants;
-    data['prices'] = this.prices;
     return data;
   }
 }
@@ -23,27 +20,22 @@ class MenuItem {
 const items = [
   {
     "name": "BitterGourd",
-    "variants": ["250 gm", "500 gm", "1kg"],
-    "prices": [50, 85, 150]
+    "variants": ["250 gm", "50", "500 gm", "85", "1kg", "150"],
   },
   {
     "name": "Lauki",
-    "variants": ["250 gm", "500 gm", "1kg"],
-    "prices": [60, 110, 200]
+    "variants": ["250 gm", "60", "500 gm", "110", "1kg", "200"],
   },
   {
     "name": "Onion",
-    "variants": ["500 gm", "1kg", "2kg"],
-    "prices": [25, 45, 85]
+    "variants": ["500 gm", "25", "1kg", "45", "2kg", "85"],
   },
   {
     "name": "Dhaniya",
-    "variants": ["100 gm", "200 gm", "500gm"],
-    "prices": [15, 25, 50]
+    "variants": ["100 gm", 15, "200 gm", 25, "500gm", 50],
   },
   {
     "name": "Tomato",
-    "variants": ["500 gm", "1kg"],
-    "prices": [35, 60]
+    "variants": ["500 gm", 35, "1kg", 60],
   },
 ];
