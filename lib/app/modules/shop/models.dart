@@ -46,6 +46,7 @@ class Selection {
 class Variant {
   late String name;
   late String rate;
+  int qty = 0;
 
   Variant({required this.name, required this.rate});
 
@@ -149,8 +150,8 @@ getSelectedItemFromMenuItem(MenuItem menuItem) {
 }
 
 class Cart {
-  late List<SelectedItem> items;
   late int amount;
+  late List<Map<String, dynamic>> items;
 
   Cart({required this.items, required this.amount});
 }

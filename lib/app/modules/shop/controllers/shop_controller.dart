@@ -11,12 +11,14 @@ class ShopController extends GetxController {
   final FocusNode searchFocusNode = new FocusNode();
   late Rx<Widget> searchField;
 
-  var mappedItems = items.map((e) => MenuItem.fromJson(e));
+  late Iterable<MenuItem> mappedItems;
 
   final count = 0.obs;
   @override
   void onInit() {
-    print("init search field");
+    //TODO: Add Cache
+    mappedItems = items.map((e) => MenuItem.fromJson(e));
+
     searchField = TextField(
       controller: searchQuery,
       focusNode: searchFocusNode,
