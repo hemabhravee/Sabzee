@@ -1,9 +1,11 @@
-class SelectedItem {
-  late String name;
-  late List<Selection> selections;
+// class SelectedItem {
+//   late String name;
+//   late List<Selection> selections;
 
-  SelectedItem({required this.name, required this.selections});
-}
+//   SelectedItem({required this.name, required this.selections});
+// }
+
+import 'package:get/get.dart';
 
 class MenuItem {
   late String name;
@@ -30,29 +32,31 @@ class MenuItem {
   }
 }
 
-class Selection {
-  late String name;
-  late String rate;
-  late int qty;
+// class Selection {
+//   late String name;
+//   late String rate;
+//   late int qty;
 
-  Selection({required this.name, required this.rate, required this.qty});
-  Selection.fromVariant({required Variant variant}) {
-    this.name = variant.name;
-    this.rate = variant.rate;
-    this.qty = 0;
-  }
-}
+//   Selection({required this.name, required this.rate, required this.qty});
+//   Selection.fromVariant({required Variant variant}) {
+//     this.name = variant.name;
+//     this.rate = variant.rate;
+//     this.qty = 0;
+//   }
+// }
 
 class Variant {
   late String name;
   late String rate;
-  int qty = 0;
+  late int qty;
 
-  Variant({required this.name, required this.rate});
+  Variant({required this.name, required this.rate, this.qty = 0});
 
   Variant.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     rate = json['rate'];
+    qty = 0;
+    // print("variants.fromJson called");
   }
 
   Map<String, dynamic> toJson() {
@@ -138,16 +142,16 @@ const items = [
   },
 ];
 
-getSelectedItemFromMenuItem(MenuItem menuItem) {
-  List<Selection> selections = [];
-  menuItem.variants.forEach((element) {
-    selections.add(Selection.fromVariant(variant: element));
-  });
-  return new SelectedItem(
-    name: menuItem.name,
-    selections: selections,
-  );
-}
+// getSelectedItemFromMenuItem(MenuItem menuItem) {
+//   List<Selection> selections = [];
+//   menuItem.variants.forEach((element) {
+//     selections.add(Selection.fromVariant(variant: element));
+//   });
+//   return new SelectedItem(
+//     name: menuItem.name,
+//     selections: selections,
+//   );
+// }
 
 class Cart {
   late int amount;

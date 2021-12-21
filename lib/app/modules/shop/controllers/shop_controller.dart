@@ -11,13 +11,20 @@ class ShopController extends GetxController {
   final FocusNode searchFocusNode = new FocusNode();
   late Rx<Widget> searchField;
 
-  late Iterable<MenuItem> mappedItems;
+  late RxList<MenuItem> mappedItems;
 
   final count = 0.obs;
+
+  late Future<String> getMappedItems;
+
   @override
   void onInit() {
     //TODO: Add Cache
-    mappedItems = items.map((e) => MenuItem.fromJson(e));
+    getMappedItems = Future<String>.delayed(const Duration(seconds: 0), () {
+      mappedItems = items.map((e) => MenuItem.fromJson(e)).toList().obs;
+      print("Shop controller oninit");
+      return 'Data Loaded';
+    });
 
     searchField = TextField(
       controller: searchQuery,

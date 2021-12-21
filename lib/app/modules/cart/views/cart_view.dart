@@ -29,8 +29,8 @@ class CartView extends GetView<CartController> {
                       child: ListView.builder(
                           shrinkWrap: true,
                           scrollDirection: Axis.vertical,
-                          itemCount: homeController.cart.value
-                              .items[index]['item'].selections.length,
+                          itemCount: homeController
+                              .cart.value.items[index]['item'].variants.length,
                           itemBuilder: (context, index2) {
                             return Text("Selections");
                           }),
