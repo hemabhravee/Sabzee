@@ -20,6 +20,7 @@ class ShopController extends GetxController {
   @override
   void onInit() {
     //TODO: Add Cache
+    print("Fetching mapped items");
     getMappedItems = Future<String>.delayed(const Duration(seconds: 0), () {
       mappedItems = items.map((e) => MenuItem.fromJson(e)).toList().obs;
       print("Shop controller oninit");

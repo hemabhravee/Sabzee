@@ -12,20 +12,27 @@ customModalBottomSheet(BuildContext context, int index) {
       builder: (BuildContext context) {
         var shopController = Get.find<ShopController>();
         var homeController = Get.find<HomeController>();
-        Rx<MenuItem> y = MenuItem(name: "name", variants: []).obs;
-
-        print("qty =" +
-            shopController.mappedItems.value[index].variants[0].qty.toString());
+        Rx<MenuItem> y = MenuItem(
+                name: "name",
+                variants: [],
+                id: shopController.mappedItems.value[index].id)
+            .obs;
+        RxList<int> quantities = <int>[].obs;
 
         y.value.variants = shopController.mappedItems.value[index].variants
-            .map((e) => Variant(name: e.name, rate: e.rate, qty: e.qty))
+            .map((e) => Variant(name: e.name, rate: e.rate, id: e.id))
             .toList();
+        y.value.variants.forEachIndexed((i, element) {
+          quantities.add(getQuantityFromUid(
+              shopController.mappedItems.value[index].id,
+              y.value.variants[i].id));
+        });
 
         y.value.name = shopController.mappedItems.value[index].name;
 
         Rx<int> cost = 0.obs;
         y.value.variants.forEach((element) {
-          cost.value += element.qty * int.parse(element.rate);
+          // cost.value += element.qty * int.parse(element.rate);
         });
         // for (int i = 0; i < 5; i++) {
         //   print('incrementing');
@@ -100,7 +107,7 @@ customModalBottomSheet(BuildContext context, int index) {
                                   height: Get.height * 0.03,
                                   child: Center(child: Icon(Icons.remove))),
                               onPressed: () {
-                                if (y.value.variants[index2].qty > 0) {
+                                if (quantities[index2] > 0) {
                                   // y.value.refresh();
 
                                 }
@@ -114,8 +121,7 @@ customModalBottomSheet(BuildContext context, int index) {
                               ),
                             ),
                             Obx(
-                              () =>
-                                  Text(y.value.variants[index2].qty.toString()),
+                              () => Text(quantities[index2].toString()),
                             ),
                             OutlinedButton(
                               // +
@@ -125,20 +131,18 @@ customModalBottomSheet(BuildContext context, int index) {
                                   child: Center(child: Icon(Icons.add))),
                               onPressed: () {
                                 print("onpressed");
-                                print("old = " +
-                                    y.value.variants[index2].qty.toString());
+                                print("old = " + quantities[index2].toString());
 
-                                y.value.variants[index2].qty++;
+                                quantities[index2]++;
                                 cost.value +=
                                     int.parse(y.value.variants[index2].rate);
 
                                 y.refresh();
 
-                                print("new = " +
-                                    y.value.variants[index2].qty.toString());
+                                print("new = " + quantities[index2].toString());
                                 print("original = " +
-                                    shopController
-                                        .mappedItems[index].variants[index2].qty
+                                    getQuantityFromUid(y.value.id,
+                                            y.value.variants[index2].id)
                                         .toString());
                                 print("cost = " + cost.value.toString());
                               },
@@ -150,7 +154,7 @@ customModalBottomSheet(BuildContext context, int index) {
                                     )),
                               ),
                             ),
-                            Obx(() => Text((y.value.variants[index2].qty *
+                            Obx(() => Text((quantities[index2] *
                                     int.parse(y.value.variants[index2].rate))
                                 .toString())),
                           ],
@@ -169,13 +173,30 @@ customModalBottomSheet(BuildContext context, int index) {
               TextButton(
                 onPressed: () {
                   if (cost.value > 0) {
-                    homeController.cart.value.items
-                        .add({'item': y.value, 'cost': cost});
+                    // homeController.cart.value.items
+                    //     .add(CartItem(uid: y.value, qty: qty));
 
-                    y.value.variants.forEachIndexed((index, value) {
-                      shopController.mappedItems[index].variants[index].qty =
-                          value.qty;
+                    y.value.variants.forEachIndexed((i, value) {
+                      if (quantities[i] > 0) {
+                        itemExistsInCart(
+                                shopController.mappedItems[index].id, value.id)
+                            ? homeController.cart.value.items
+                                .forEach((element) {
+                                if (element.uid == y.value.id + "-" + value.id)
+                                  element.qty = quantities[i];
+                              })
+                            : homeController.cart.value.items.add(CartItem(
+                                uid: shopController.mappedItems[index].id +
+                                    "-" +
+                                    value.id,
+                                qty: quantities[i]));
+                      }
                     });
+
+                    // y.value.variants.forEachIndexed((index, value) {
+                    //   shopController.mappedItems[index].variants[index].qty =
+                    //       value.qty;
+                    // });
                   }
                   Navigator.pop(context);
                   print(homeController.cart.value.items);

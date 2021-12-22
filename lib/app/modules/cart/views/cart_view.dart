@@ -24,19 +24,19 @@ class CartView extends GetView<CartController> {
               itemBuilder: (context, index) {
                 return Row(
                   children: [
-                    Text(homeController.cart.value.items[index]['item'].name),
-                    Expanded(
-                      child: ListView.builder(
-                          shrinkWrap: true,
-                          scrollDirection: Axis.vertical,
-                          itemCount: homeController
-                              .cart.value.items[index]['item'].variants.length,
-                          itemBuilder: (context, index2) {
-                            return Text("Selections");
-                          }),
-                    ),
-                    Text(homeController.cart.value.items[index]['cost']
-                        .toString()),
+                    // Text(homeController.cart.value.items[index]['item'].name),
+                    // Expanded(
+                    //   child: ListView.builder(
+                    //       shrinkWrap: true,
+                    //       scrollDirection: Axis.vertical,
+                    //       itemCount: homeController
+                    //           .cart.value.items[index]['item'].variants.length,
+                    //       itemBuilder: (context, index2) {
+                    //         return Text("Selections");
+                    //       }),
+                    // ),
+                    // Text(homeController.cart.value.items[index]['cost']
+                    //     .toString()),
                   ],
                 );
               })),

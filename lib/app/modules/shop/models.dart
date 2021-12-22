@@ -6,19 +6,24 @@
 // }
 
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
 class MenuItem {
   late String name;
   late List<Variant> variants;
+  late String id;
 
-  MenuItem({required this.name, required this.variants});
+  MenuItem({required this.name, required this.variants, required this.id});
 
   MenuItem.fromJson(Map<String, dynamic> json) {
     name = json['name'];
-    print(json['variants']);
+    id = json['id'];
+    //print("MenuItem.fromJson called");
     if (json['variants'] != null) {
+      //print("variants are not null, adding");
       variants = <Variant>[];
       json['variants'].forEach((v) {
+        //print("calling variant.fromJson");
         variants.add(new Variant.fromJson(v));
       });
     }
@@ -32,31 +37,22 @@ class MenuItem {
   }
 }
 
-// class Selection {
-//   late String name;
-//   late String rate;
-//   late int qty;
-
-//   Selection({required this.name, required this.rate, required this.qty});
-//   Selection.fromVariant({required Variant variant}) {
-//     this.name = variant.name;
-//     this.rate = variant.rate;
-//     this.qty = 0;
-//   }
-// }
-
 class Variant {
   late String name;
   late String rate;
-  late int qty;
+  // late int qty;
+  late String id;
 
-  Variant({required this.name, required this.rate, this.qty = 0});
+  Variant({required this.name, required this.rate, required this.id});
 
   Variant.fromJson(Map<String, dynamic> json) {
+    //print("variants.fromJson called");
+
     name = json['name'];
     rate = json['rate'];
-    qty = 0;
-    // print("variants.fromJson called");
+    id = json['id'];
+
+    //print("variants.fromJson called");
   }
 
   Map<String, dynamic> toJson() {
@@ -70,92 +66,69 @@ class Variant {
 const items = [
   {
     "name": "BitterGourd",
+    "id": "BTG",
     "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
+      {"name": "250 gm", "rate": "50", "id": "weight1"},
+      {"name": "500 gm", "rate": "85", "id": "weight2"},
+      {"name": "1kg", "rate": "150", "id": "weight3"}
     ],
   },
   {
-    "name": "BitterGourd",
+    "name": "Potatoes",
+    "id": "PTT",
     "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
+      {"name": "250 gm", "rate": "10", "id": "weight1"},
+      {"name": "500 gm", "rate": "18", "id": "weight2"},
+      {"name": "1kg", "rate": "35", "id": "weight3"}
     ],
   },
   {
-    "name": "BitterGourd",
+    "name": "Tamatoes",
+    "id": "TMT",
     "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
+      {"name": "250 gm", "rate": "25", "id": "weight1"},
+      {"name": "500 gm", "rate": "45", "id": "weight2"},
+      {"name": "1kg", "rate": "85", "id": "weight3"}
     ],
   },
   {
-    "name": "BitterGourd",
+    "name": "Green Chilly",
+    "id": "GC",
     "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
-    ],
-  },
-  {
-    "name": "BitterGourd",
-    "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
-    ],
-  },
-  {
-    "name": "BitterGourd",
-    "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
-    ],
-  },
-  {
-    "name": "BitterGourd",
-    "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
-    ],
-  },
-  {
-    "name": "BitterGourd",
-    "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
-    ],
-  },
-  {
-    "name": "BitterGourd",
-    "variants": [
-      {"name": "250 gm", "rate": "50"},
-      {"name": "500 gm", "rate": "85"},
-      {"name": "1kg", "rate": "150"}
+      {"name": "250 gm", "rate": "20", "id": "weight1"},
+      {"name": "500 gm", "rate": "35", "id": "weight2"},
+      {"name": "1kg", "rate": "65", "id": "weight3"}
     ],
   },
 ];
 
-// getSelectedItemFromMenuItem(MenuItem menuItem) {
-//   List<Selection> selections = [];
-//   menuItem.variants.forEach((element) {
-//     selections.add(Selection.fromVariant(variant: element));
-//   });
-//   return new SelectedItem(
-//     name: menuItem.name,
-//     selections: selections,
-//   );
-// }
-
 class Cart {
   late int amount;
-  late List<Map<String, dynamic>> items;
+  late List<CartItem> items;
 
   Cart({required this.items, required this.amount});
+}
+
+class CartItem {
+  late int qty;
+  late String uid;
+
+  CartItem({required this.uid, required this.qty});
+}
+
+int getQuantityFromUid(String itemId, String variantId) {
+  var homeController = Get.find<HomeController>();
+  int qty = 0;
+
+  print("finding " + itemId + "-" + variantId + "  in cart");
+  homeController.cart.value.items.forEach((element) {
+    print("matching against " + element.uid);
+    if (element.uid == itemId + "-" + variantId) qty = element.qty;
+  });
+  print("qty = " + qty.toString());
+  return qty;
+}
+
+bool itemExistsInCart(String itemId, String variantId) {
+  return getQuantityFromUid(itemId, variantId) != 0;
 }
