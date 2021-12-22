@@ -15,25 +15,26 @@ customModalBottomSheet(BuildContext context, int index) {
         Rx<MenuItem> y = MenuItem(
                 name: "name",
                 variants: [],
-                id: shopController.mappedItems.value[index].id)
+                id: homeController.mappedItems.value[index].id)
             .obs;
         RxList<int> quantities = <int>[].obs;
 
-        y.value.variants = shopController.mappedItems.value[index].variants
+        y.value.variants = homeController.mappedItems.value[index].variants
             .map((e) => Variant(name: e.name, rate: e.rate, id: e.id))
             .toList();
         y.value.variants.forEachIndexed((i, element) {
           quantities.add(getQuantityFromUid(
-              shopController.mappedItems.value[index].id,
+              homeController.mappedItems.value[index].id,
               y.value.variants[i].id));
         });
 
-        y.value.name = shopController.mappedItems.value[index].name;
+        y.value.name = homeController.mappedItems.value[index].name;
 
         Rx<int> cost = 0.obs;
-        y.value.variants.forEach((element) {
-          // cost.value += element.qty * int.parse(element.rate);
+        y.value.variants.forEachIndexed((i, element) {
+          cost.value += quantities[i] * int.parse(element.rate);
         });
+        bool isItemNew = cost == 0;
         // for (int i = 0; i < 5; i++) {
         //   print('incrementing');
         //   y.value.variants[0].qty++;
@@ -179,14 +180,14 @@ customModalBottomSheet(BuildContext context, int index) {
                     y.value.variants.forEachIndexed((i, value) {
                       if (quantities[i] > 0) {
                         itemExistsInCart(
-                                shopController.mappedItems[index].id, value.id)
+                                homeController.mappedItems[index].id, value.id)
                             ? homeController.cart.value.items
                                 .forEach((element) {
                                 if (element.uid == y.value.id + "-" + value.id)
                                   element.qty = quantities[i];
                               })
                             : homeController.cart.value.items.add(CartItem(
-                                uid: shopController.mappedItems[index].id +
+                                uid: homeController.mappedItems[index].id +
                                     "-" +
                                     value.id,
                                 qty: quantities[i]));
@@ -202,7 +203,7 @@ customModalBottomSheet(BuildContext context, int index) {
                   print(homeController.cart.value.items);
                   homeController.cart.refresh();
                 },
-                child: Text("Add to Cart"),
+                child: Text(isItemNew ? "Add to Cart" : "Update Cart"),
               )
             ],
           ),

@@ -10,6 +10,7 @@ class CartView extends GetView<CartController> {
   Widget build(BuildContext context) {
     Get.put(CartController());
     var homeController = Get.find<HomeController>();
+    
 
     return Scaffold(
       appBar: AppBar(
@@ -22,9 +23,14 @@ class CartView extends GetView<CartController> {
               scrollDirection: Axis.vertical,
               itemCount: homeController.cart.value.items.length,
               itemBuilder: (context, index) {
+                // item_name  variant_name  rate
+                var item_id,
+                    variant_id =
+                        homeController.cart.value.items[index].uid.split("-");
+                String item_name = "";
                 return Row(
                   children: [
-                    // Text(homeController.cart.value.items[index]['item'].name),
+                   // Text(CartController),
                     // Expanded(
                     //   child: ListView.builder(
                     //       shrinkWrap: true,
