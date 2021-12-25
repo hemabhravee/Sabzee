@@ -5,13 +5,13 @@ import 'package:sabzee/app/modules/shop/models.dart';
 
 class ItemPageController extends GetxController {
   var arguments = Get.arguments;
-  late int index = arguments[0];
+  late int index = arguments == null ? 0 : arguments[0];
   var shopController = Get.find<ShopController>();
   var homeController = Get.find<HomeController>();
   late Rx<MenuItem> y;
   RxList<int> quantities = <int>[].obs;
   Rx<int> cost = 0.obs;
-  late bool isItemNew = cost == 0;
+  late bool isItemNew;
 
   final count = 0.obs;
 
@@ -66,8 +66,8 @@ class ItemPageController extends GetxController {
     Get.back();
   }
 
-  @override
-  void onInit() {
+  setIndex(int newIndex) => index = newIndex;
+  initFunc() {
     y = MenuItem(
             name: "name",
             variants: [],
@@ -84,6 +84,12 @@ class ItemPageController extends GetxController {
       cost.value += quantities[i] * int.parse(element.rate);
     }
     print("Cost = " + cost.value.toString());
+    isItemNew = cost == 0;
+  }
+
+  @override
+  void onInit() {
+    if (arguments != null) initFunc();
     super.onInit();
   }
 
@@ -94,5 +100,6 @@ class ItemPageController extends GetxController {
 
   @override
   void onClose() {}
+
   void increment() => count.value++;
 }

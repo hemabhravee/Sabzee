@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
@@ -10,55 +11,32 @@ customModalBottomSheet(BuildContext context, int index) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
-      builder: (BuildContext context) =>
-          ModalBottomSheet(index: index, context: context));
+      elevation: 20,
+      builder: (BuildContext context) => ModalBottomSheet(index: index));
 }
 
-class ModalBottomSheet extends StatelessWidget {
+class ModalBottomSheet extends StatefulWidget {
   late int index;
-  late BuildContext context;
-  ModalBottomSheet({Key? key, required this.index, required this.context})
-      : super(key: key);
+  ModalBottomSheet({Key? key, required this.index}) : super(key: key);
+
+  @override
+  _ModalBottomSheetState createState() => _ModalBottomSheetState();
+}
+
+class _ModalBottomSheetState extends State<ModalBottomSheet> {
+  @override
+  void dispose() {
+    Get.delete<ItemPageController>();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var itemController =
-        Get.create(() => ItemPageController(), permanent: false);
-    var shopController = Get.find<ShopController>();
+    Get.create(() => ItemPageController(), permanent: false);
+    var itemController = Get.find<ItemPageController>();
+    itemController.setIndex(widget.index);
+    itemController.initFunc();
     var homeController = Get.find<HomeController>();
-    Rx<MenuItem> y = MenuItem(
-            name: "name",
-            variants: [],
-            id: homeController.mappedItems.value[index].id)
-        .obs;
-    RxList<int> quantities = <int>[].obs;
-
-    y.value.variants = homeController.mappedItems.value[index].variants
-        .map((e) => Variant(name: e.name, rate: e.rate, id: e.id))
-        .toList();
-    y.value.variants.forEachIndexed((i, element) {
-      quantities.add(getQuantityFromUid(
-          homeController.mappedItems.value[index].id, y.value.variants[i].id));
-    });
-
-    y.value.name = homeController.mappedItems.value[index].name;
-
-    Rx<int> cost = 0.obs;
-    y.value.variants.forEachIndexed((i, element) {
-      cost.value += quantities[i] * int.parse(element.rate);
-    });
-    bool isItemNew = cost == 0;
-    // for (int i = 0; i < 5; i++) {
-    //   print('incrementing');
-    //   y.value.variants[0].qty++;
-    //   print(shopController.mappedItems
-    //           .elementAt(index)
-    //           .variants[0]
-    //           .qty
-    //           .toString() +
-    //       " " +
-    //       y.value.variants[0].qty.toString());
-    // }
 
     return Container(
       // height: Get.height,
@@ -71,7 +49,7 @@ class ModalBottomSheet extends StatelessWidget {
             image: NetworkImage(
                 'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
           ),
-          Text(y.value.name,
+          Text(itemController.y.value.name,
               style: TextStyle(
                 fontSize: 36,
               )),
@@ -97,7 +75,7 @@ class ModalBottomSheet extends StatelessWidget {
               color: Colors.blue,
             ),
             child: ListView.builder(
-                itemCount: y.value.variants.length,
+                itemCount: itemController.y.value.variants.length,
                 itemBuilder: (BuildContext context, int index2) {
                   return Container(
                     margin: EdgeInsets.symmetric(
@@ -113,63 +91,25 @@ class ModalBottomSheet extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(y.value.variants[index2].name.toString()),
-                        Text(y.value.variants[index2].rate.toString()),
-                        OutlinedButton(
-                          child: Container(
-                              // color: Colors.red,
-                              height: Get.height * 0.03,
-                              child: Center(child: Icon(Icons.remove))),
-                          onPressed: () {
-                            if (quantities[index2] > 0) {
-                              // y.value.refresh();
-                          
-                            }
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(CircleBorder(
-                                // borderRadius:
-                                //     BorderRadius.circular(
-                                //         50.0),
-                                )),
-                          ),
-                        ),
+                        Text(itemController.y.value.variants[index2].name
+                            .toString()),
+                        Text(itemController.y.value.variants[index2].rate
+                            .toString()),
+                        getOutlinedButton(
+                            isAdd: false,
+                            onPressed: () => itemController.onSubtract(index2),
+                            height: Get.height),
                         Obx(
-                          () => Text(quantities[index2].toString()),
+                          () => Text(
+                              itemController.quantities[index2].toString()),
                         ),
-                        OutlinedButton(
-                          // +
-                          child: Container(
-                              // color: Colors.red,
-                              height: Get.height * 0.03,
-                              child: Center(child: Icon(Icons.add))),
-                          onPressed: () {
-                            print("onpressed");
-                            print("old = " + quantities[index2].toString());
-
-                            quantities[index2]++;
-                            cost.value +=
-                                int.parse(y.value.variants[index2].rate);
-
-                            y.refresh();
-
-                            print("new = " + quantities[index2].toString());
-                            print("original = " +
-                                getQuantityFromUid(
-                                        y.value.id, y.value.variants[index2].id)
-                                    .toString());
-                            print("cost = " + cost.value.toString());
-                          },
-                          style: ButtonStyle(
-                            shape: MaterialStateProperty.all(CircleBorder(
-                                // borderRadius:
-                                //     BorderRadius.circular(
-                                //         50.0),
-                                )),
-                          ),
-                        ),
-                        Obx(() => Text((quantities[index2] *
-                                int.parse(y.value.variants[index2].rate))
+                        getOutlinedButton(
+                            isAdd: true,
+                            onPressed: () => itemController.onAdd(index2),
+                            height: Get.height),
+                        Obx(() => Text((itemController.quantities[index2] *
+                                int.parse(itemController
+                                    .y.value.variants[index2].rate))
                             .toString())),
                       ],
                     ),
@@ -181,41 +121,16 @@ class ModalBottomSheet extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   Text("Total Cost"),
-                  Obx(() => Text(cost.value.toString())),
+                  Obx(() => Text(itemController.cost.value.toString())),
                 ]),
           ),
           TextButton(
             onPressed: () {
-              if (cost.value > 0) {
-                // homeController.cart.value.items
-                //     .add(CartItem(uid: y.value, qty: qty));
-
-                y.value.variants.forEachIndexed((i, value) {
-                  if (quantities[i] > 0) {
-                    itemExistsInCart(
-                            homeController.mappedItems[index].id, value.id)
-                        ? homeController.cart.value.items.forEach((element) {
-                            if (element.uid == y.value.id + "-" + value.id)
-                              element.qty = quantities[i];
-                          })
-                        : homeController.cart.value.items.add(CartItem(
-                            uid: homeController.mappedItems[index].id +
-                                "-" +
-                                value.id,
-                            qty: quantities[i]));
-                  }
-                });
-
-                // y.value.variants.forEachIndexed((index, value) {
-                //   shopController.mappedItems[index].variants[index].qty =
-                //       value.qty;
-                // });
-              }
-              Navigator.pop(context);
-              print(homeController.cart.value.items);
-              homeController.cart.refresh();
+              itemController.onSubmit();
+              // Get.back();
             },
-            child: Text(isItemNew ? "Add to Cart" : "Update Cart"),
+            child:
+                Text(itemController.isItemNew ? "Add to Cart" : "Update Cart"),
           )
         ],
       ),

@@ -65,7 +65,7 @@ class CartView extends GetView<CartController> {
                               });
                             }
                           });
-                          return "Cart Item Loaded!";
+                          return "Cart Items Loaded!";
                         });
 
                         subtractOnPressed() {
@@ -87,52 +87,42 @@ class CartView extends GetView<CartController> {
                         return FutureBuilder<String>(
                             future: getCartItems,
                             builder: (context, snapshot) {
-                              return Container(
-                                height: Get.height * 0.05,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 0, vertical: 0),
-                                decoration: BoxDecoration(
-                                  color: Colors.grey,
-                                  borderRadius: BorderRadius.circular(25),
-                                ),
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    Text(item_names[index]),
-                                    Text(variant_names[index]),
-                                    Text(variant_rates[index]),
-                                    getOutlinedButton(
-                                        isAdd: false,
-                                        onPressed: subtractOnPressed,
-                                        height: Get.height * 0.03),
-                                    Text(homeController
-                                        .cart.value.items[index].qty
-                                        .toString()),
-                                    getOutlinedButton(
-                                        isAdd: true,
-                                        onPressed: addOnPressed,
-                                        height: Get.height * 0.03),
-                                    Text((homeController
-                                                .cart.value.items[index].qty *
-                                            int.parse(variant_rates[index]))
-                                        .toString()),
-
-                                    // Expanded(
-                                    //   child: ListView.builder(
-                                    //       shrinkWrap: true,
-                                    //       scrollDirection: Axis.vertical,
-                                    //       itemCount: homeController
-                                    //           .cart.value.items[index]['item'].variants.length,
-                                    //       itemBuilder: (context, index2) {
-                                    //         return Text("Selections");
-                                    //       }),
-                                    // ),
-                                    // Text(homeController.cart.value.items[index]['cost']
-                                    //     .toString()),
-                                  ],
-                                ),
-                              );
+                              return snapshot.hasData
+                                  ? Container(
+                                      height: Get.height * 0.05,
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 0, vertical: 0),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey,
+                                        borderRadius: BorderRadius.circular(25),
+                                      ),
+                                      child: Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceEvenly,
+                                        children: [
+                                          Text(item_names[index]),
+                                          Text(variant_names[index]),
+                                          Text(variant_rates[index]),
+                                          getOutlinedButton(
+                                              isAdd: false,
+                                              onPressed: subtractOnPressed,
+                                              height: Get.height),
+                                          Text(homeController
+                                              .cart.value.items[index].qty
+                                              .toString()),
+                                          getOutlinedButton(
+                                              isAdd: true,
+                                              onPressed: addOnPressed,
+                                              height: Get.height),
+                                          Text((homeController.cart.value
+                                                      .items[index].qty *
+                                                  int.parse(
+                                                      variant_rates[index]))
+                                              .toString()),
+                                        ],
+                                      ),
+                                    )
+                                  : CircularProgressIndicator();
                             });
                       })),
                 ),

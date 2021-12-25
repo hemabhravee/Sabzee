@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
 import 'package:sabzee/app/modules/shop/views/shop_view.dart';
@@ -17,6 +18,8 @@ class HomeController extends GetxController {
       .obs;
   late RxList<MenuItem> mappedItems;
   late Future<String> getMappedItems;
+
+  deleteItemController() => Get.delete<ItemPageController>();
 
   addItemToCart({required String uid, required int qty}) {
     cart.value.items.add(CartItem(uid: uid, qty: qty));

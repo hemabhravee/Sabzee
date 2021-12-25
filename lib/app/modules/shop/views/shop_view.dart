@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import 'package:sabzee/app/modules/orders/views/orders_view.dart';
-import 'package:sabzee/app/modules/shop/views/item_page_view.dart';
+import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/widgets/shop_item_card_modal_bottom_sheet.dart';
 
 import '../controllers/shop_controller.dart';
@@ -169,10 +169,11 @@ class ShopView extends GetView<ShopController> {
                                 .toString() +
                             " variants available"),
                         TextButton(
-                          onPressed: () {
-                            Get.to(() => ItemPageView(),
-                                arguments: [index]);
-                            // customModalBottomSheet(context, index);
+                          onPressed: () async {
+                            // Get.to(() => ItemPageView(),
+                            //    arguments: [index]);
+
+                            customModalBottomSheet(context, index);
                           },
                           child: Text("Add"),
                         )

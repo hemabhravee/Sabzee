@@ -7,7 +7,7 @@ getOutlinedButton(
   return OutlinedButton(
     child: Container(
         // color: Colors.red,
-        height: height,
+        height: height * 0.03,
         child: Center(child: Icon(isAdd ? Icons.add : Icons.remove))),
     onPressed: onPressed,
     style: ButtonStyle(
