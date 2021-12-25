@@ -89,64 +89,68 @@ class ShopView extends GetView<ShopController> {
               ),
             ),
           ),
-          SliverGrid(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 3 / 4,
-            ),
-            delegate: SliverChildBuilderDelegate(
-              (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: () {
-                    controller.searchFocusNode.unfocus();
-                    controller.isSearching.value = false;
-                    controller.actionIcon.value =
-                        new Icon(Icons.search, color: Colors.white);
-                  },
-                  child: Container(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 5,
-                      vertical: 15,
+          Obx(
+            () => SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                childAspectRatio: 3 / 4,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return GestureDetector(
+                    onTap: () {
+                      controller.searchFocusNode.unfocus();
+                      controller.isSearching.value = false;
+                      controller.actionIcon.value =
+                          new Icon(Icons.search, color: Colors.white);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 5,
+                        vertical: 15,
+                      ),
+                      color: Colors.teal[100 * ((index + 1) % 9)],
+                      // height: Get.height * 0.3,
+                      child: Center(
+                          child: Column(
+                        children: [
+                          Container(
+                              height: Get.height * 0.23,
+                              width: Get.width,
+                              color: Colors.amber,
+                              child: const Image(
+                                image: NetworkImage(
+                                    'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+                              )),
+                          Text(controller.displayItems.value
+                              .elementAt(index)
+                              .name),
+                          Text((controller.displayItems.value
+                                      .elementAt(index)
+                                      .variants
+                                      .length)
+                                  .toString() +
+                              " variants available"),
+                          TextButton(
+                            onPressed: () async {
+                              // Get.to(() => ItemPageView(),
+                              //    arguments: [index]);
+                              String item_id = controller.displayItems.value
+                                  .elementAt(index)
+                                  .id;
+                              customModalBottomSheet(context, item_id);
+                            },
+                            child: Text("Add"),
+                          )
+                        ],
+                      )),
                     ),
-                    color: Colors.teal[100 * ((index + 1) % 9)],
-                    // height: Get.height * 0.3,
-                    child: Center(
-                        child: Column(
-                      children: [
-                        Container(
-                            height: Get.height * 0.23,
-                            width: Get.width,
-                            color: Colors.amber,
-                            child: const Image(
-                              image: NetworkImage(
-                                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
-                            )),
-                        Text(homeController.mappedItems.value
-                            .elementAt(index)
-                            .name),
-                        Text((homeController.mappedItems.value
-                                    .elementAt(index)
-                                    .variants
-                                    .length)
-                                .toString() +
-                            " variants available"),
-                        TextButton(
-                          onPressed: () async {
-                            // Get.to(() => ItemPageView(),
-                            //    arguments: [index]);
-
-                            customModalBottomSheet(context, index);
-                          },
-                          child: Text("Add"),
-                        )
-                      ],
-                    )),
-                  ),
-                );
-              },
-              childCount: homeController.mappedItems.value.length,
+                  );
+                },
+                childCount: controller.displayItems.value.length,
+              ),
             ),
-          ),
+          )
         ],
       ),
       // GestureDetector(

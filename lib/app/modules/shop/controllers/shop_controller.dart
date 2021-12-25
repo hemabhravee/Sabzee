@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
 
@@ -8,9 +9,12 @@ class ShopController extends GetxController {
   Rx<Widget> appBarTitle =
       new Text("Shop", style: new TextStyle(color: Colors.white)).obs;
   Rx<Icon> actionIcon = new Icon(Icons.search, color: Colors.white).obs;
-  final TextEditingController searchQuery = new TextEditingController();
+  final TextEditingController searchController = new TextEditingController();
   final FocusNode searchFocusNode = new FocusNode();
   late Rx<Widget> searchField;
+  var homeController = Get.find<HomeController>();
+  var mappedItems = items.map((e) => MenuItem.fromJson(e)).toList();
+  late RxList<MenuItem> displayItems = mappedItems.obs;
 
   searchButtonHandler() {
     print("Search Button Pressed");
@@ -21,14 +25,40 @@ class ShopController extends GetxController {
     } else {
       isSearching.value = false;
       actionIcon.value = new Icon(Icons.search, color: Colors.white);
-      print("Exiting Search");
+      displayItems.value = mappedItems;
+      searchController.text = "";
     }
+    print("Exiting Search");
   }
 
   // late RxList<MenuItem> mappedItems;
   // late Future<String> getMappedItems;
 
   final count = 0.obs;
+
+  updateDisplayMenu(String query) {
+    print("updating display items against query : " + query);
+
+    List<MenuItem> x = [];
+
+    mappedItems.forEach((element) {
+      // var y = [];
+      // element.variants.forEach((element) {
+      //   y.add(element.toJson());
+      // });
+      // if (element.name.startsWith(query) || query == "")
+      //   x.add(MenuItem.fromJson(
+      //       {"name": element.name, "variants": y, "id": element.id}));
+      if (element.name.startsWith(query) || query == "") x.add(element);
+    });
+
+    displayItems.value = x;
+    if (query == "") print("empty");
+    displayItems.refresh();
+    print(displayItems);
+    print(homeController.mappedItems());
+    update();
+  }
 
   @override
   void onInit() {
@@ -41,11 +71,14 @@ class ShopController extends GetxController {
     // });
 
     searchField = TextField(
-      controller: searchQuery,
+      controller: searchController,
       focusNode: searchFocusNode,
       style: new TextStyle(
         color: Colors.white,
       ),
+      onChanged: (query) {
+        updateDisplayMenu(query);
+      },
       decoration: new InputDecoration(
           prefixIcon: new Icon(Icons.search, color: Colors.white),
           hintText: "Search...",

@@ -7,17 +7,19 @@ import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
 import 'package:collection/collection.dart';
 
-customModalBottomSheet(BuildContext context, int index) {
+customModalBottomSheet(BuildContext context, String item_ID) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
       elevation: 20,
-      builder: (BuildContext context) => ModalBottomSheet(index: index));
+      builder: (BuildContext context) => ModalBottomSheet(
+            item_ID: item_ID,
+          ));
 }
 
 class ModalBottomSheet extends StatefulWidget {
-  late int index;
-  ModalBottomSheet({Key? key, required this.index}) : super(key: key);
+  late String item_ID;
+  ModalBottomSheet({Key? key, required this.item_ID}) : super(key: key);
 
   @override
   _ModalBottomSheetState createState() => _ModalBottomSheetState();
@@ -34,7 +36,7 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
   Widget build(BuildContext context) {
     Get.create(() => ItemPageController(), permanent: false);
     var itemController = Get.find<ItemPageController>();
-    itemController.setIndex(widget.index);
+    itemController.setIndex(findItemIndexFromId(widget.item_ID));
     itemController.initFunc();
     var homeController = Get.find<HomeController>();
 

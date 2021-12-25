@@ -33,6 +33,7 @@ class MenuItem {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['variants'] = this.variants;
+    data['id'] = this.id;
     return data;
   }
 }
@@ -59,6 +60,7 @@ class Variant {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['name'] = this.name;
     data['rate'] = this.rate;
+    data['id'] = this.id;
     return data;
   }
 }
@@ -138,4 +140,12 @@ int getQuantityFromUid(String itemId, String variantId) {
 
 bool itemExistsInCart(String itemId, String variantId) {
   return getQuantityFromUid(itemId, variantId) != 0;
+}
+
+int findItemIndexFromId(String id) {
+  var homeController = Get.find<HomeController>();
+  for (int i = 0; i < homeController.mappedItems.length; i++) {
+    if (homeController.mappedItems[i].id == id) return i;
+  }
+  return -1;
 }

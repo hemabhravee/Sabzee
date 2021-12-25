@@ -6,6 +6,7 @@ import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
 import '../controllers/cart_controller.dart';
+import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 
 class CartView extends GetView<CartController> {
   late RxList<String> item_ids = <String>[].obs,
@@ -22,10 +23,57 @@ class CartView extends GetView<CartController> {
       appBar: AppBar(
         title: Text('CartView'),
         centerTitle: true,
+        leading: IconButton(
+          onPressed: () {
+            homeController.innerDrawerKey.currentState?.open();
+          },
+          icon: Icon(Icons.menu),
+        ),
       ),
-      body: Container(
-        child: Container(
+      body: ExpandableBottomSheet(
+        //use the key to get access to expand(), contract() and expansionStatus
+        key: controller.bottomSheetKey,
+
+        //optional
+        //callbacks (use it for example for an animation in your header)
+        onIsContractedCallback: () {
+          print('contracted');
+          print(controller.containerKey.globalPaintBounds.toString());
+          var x = (843.0 - 813.1) / Get.height;
+          var y = Get.height;
+          print(x.toString() + " " + y.toString());
+        },
+        onIsExtendedCallback: () {
+          print('extended');
+          print(controller.containerKey.globalPaintBounds.toString());
+          var height = 843.0 - 813.1;
+          var x = height / Get.height;
+          var y = Get.height;
+          print(x.toString() + " " + y.toString());
+        },
+
+        //optional; default: Duration(milliseconds: 250)
+        //The durations of the animations.
+        animationDurationExtend: Duration(milliseconds: 500),
+        animationDurationContract: Duration(milliseconds: 250),
+
+        //optional; default: Curves.ease
+        //The curves of the animations.
+        animationCurveExpand: Curves.bounceOut,
+        animationCurveContract: Curves.ease,
+
+        //optional
+        //The content extend will be at least this height. If the content
+        //height is smaller than the persistentContentHeight it will be
+        //animated on a height change.
+        //You can use it for example if you have no header.
+        // persistentContentHeight: Get.height * 0.06,
+
+        //required
+        //This is the widget which will be overlapped by the bottom sheet.
+        background: Container(
           color: Colors.grey[700],
+          height: Get.height,
           child: Column(
             children: [
               Expanded(
@@ -138,11 +186,96 @@ class CartView extends GetView<CartController> {
                         Text(homeController.cart.value.amount.toString())),
                   ],
                 ),
-              )
+              ),
+              Obx(() => SizedBox(
+                    height: controller.sizedBoxHeight.value,
+                  )),
             ],
+          ),
+        ),
+
+        //optional
+        //This widget is sticking above the content and will never be contracted.
+        persistentHeader: Container(
+          key: controller.containerKey,
+          color: Colors.orange,
+          height: Get.height * 0.03,
+          child: Center(
+            child: Container(
+              height: Get.height * 0.007,
+              width: Get.width * 0.1,
+              color: Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
+            ),
+          ),
+        ),
+
+        //required
+        //This is the content of the bottom sheet which will be extendable by dragging.
+        expandableContent: Container(),
+        //   constraints: BoxConstraints(
+        //     maxHeight: Get.height * 0.25,
+        //   ),
+        //   child: SingleChildScrollView(
+        //     child: Column(
+        //       mainAxisSize: MainAxisSize.min,
+        //       children: <Widget>[
+        //         Container(
+        //           height: 50,
+        //           width: Get.width,
+        //           color: Colors.red[100],
+        //           child: Text("Delivery Address"),
+        //         ),
+        //         Container(
+        //           width: Get.width,
+        //           height: 50,
+        //           color: Colors.blue,
+        //           child: Text("Payment Method"),
+        //         ),
+        //       ],
+        //     ),
+        //   ),
+        // ),
+
+        // optional
+        // This will enable tap to toggle option on header.
+        enableToggle: true,
+
+        //optional
+        //This is a widget aligned to the bottom of the screen and stays there.
+        //You can use this for example for navigation.
+        persistentFooter: Container(
+          constraints: BoxConstraints(
+            maxHeight: Get.height * 0.25,
+          ),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                Container(
+                  height: 50,
+                  width: Get.width,
+                  color: Colors.red[100],
+                  child: Text("Delivery Address"),
+                ),
+                Container(
+                  width: Get.width,
+                  height: 50,
+                  color: Colors.blue,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    height: Get.height * 0.05,
+                    child: ElevatedButton(
+                        onPressed: () {}, child: Text("Proceed to Payment")),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+
+
+//var x = ;

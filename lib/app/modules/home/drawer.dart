@@ -14,19 +14,17 @@ getDrawer(BuildContext context) {
           child: Text('Menu'),
         ),
         ListTile(
-          title: const Text('Your Orders'),
+          title: const Text('Your Profile'),
           onTap: () {
             Navigator.pop(context);
             Get.to(OrdersView());
           },
         ),
         ListTile(
-          title: const Text('Settings'),
+          title: const Text('Your Orders'),
           onTap: () {
-            // Update the state of the app
-            // ...
-            // Then close the drawer
             Navigator.pop(context);
+            Get.to(OrdersView());
           },
         ),
         ListTile(
