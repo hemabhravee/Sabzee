@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
@@ -18,6 +19,9 @@ class HomeController extends GetxController {
       .obs;
   late RxList<MenuItem> mappedItems;
   late Future<String> getMappedItems;
+
+  final GlobalKey<InnerDrawerState> innerDrawerKey =
+      GlobalKey<InnerDrawerState>();
 
   deleteItemController() => Get.delete<ItemPageController>();
 

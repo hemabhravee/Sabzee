@@ -40,52 +40,7 @@ class ShopView extends GetView<ShopController> {
       //         icon: Obx(() => controller.actionIcon.value))
       //   ],
       // ),
-      drawer: Drawer(
-        child: ListView(
-          children: [
-            const DrawerHeader(
-              decoration: BoxDecoration(
-                color: Colors.blue,
-              ),
-              child: Text('Menu'),
-            ),
-            ListTile(
-              title: const Text('Your Orders'),
-              onTap: () {
-                Navigator.pop(context);
-                Get.to(OrdersView());
-              },
-            ),
-            ListTile(
-              title: const Text('Settings'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('About Us'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-            ListTile(
-              title: const Text('Contact Us'),
-              onTap: () {
-                // Update the state of the app
-                // ...
-                // Then close the drawer
-                Navigator.pop(context);
-              },
-            ),
-          ],
-        ),
-      ),
+
       body: CustomScrollView(
         slivers: <Widget>[
           SliverAppBar(
@@ -95,29 +50,36 @@ class ShopView extends GetView<ShopController> {
             floating: true,
             expandedHeight: 160.0,
             flexibleSpace: FlexibleSpaceBar(
-              title: Obx(() => controller.isSearching.value
-                  ? controller.searchField.value
-                  : controller.appBarTitle.value),
+              centerTitle: true,
+              title: Container(
+                width: Get.width,
+                color: Colors.grey,
+                child: Row(
+                  children: [
+                    IconButton(
+                      onPressed: () {
+                        homeController.innerDrawerKey.currentState?.open();
+                      },
+                      icon: Icon(Icons.menu),
+                    ),
+                    Expanded(
+                      child: Container(
+                        color: Colors.black,
+                        child: Obx(() => controller.isSearching.value
+                            ? controller.searchField.value
+                            : controller.appBarTitle.value),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: controller.searchButtonHandler,
+                      icon: Obx(() => controller.actionIcon.value),
+                    ),
+                  ],
+                ),
+              ),
               background: FlutterLogo(),
             ),
-            actions: <Widget>[
-              new IconButton(
-                  onPressed: () {
-                    print("Search Button Pressed");
-                    if (controller.actionIcon.value.icon == Icons.search) {
-                      print("Search Button Pressed");
-                      controller.actionIcon.value =
-                          new Icon(Icons.close, color: Colors.white);
-                      controller.isSearching.value = true;
-                    } else {
-                      controller.isSearching.value = false;
-                      controller.actionIcon.value =
-                          new Icon(Icons.search, color: Colors.white);
-                      print("Exiting Search");
-                    }
-                  },
-                  icon: Obx(() => controller.actionIcon.value))
-            ],
+            actions: <Widget>[],
           ),
           const SliverToBoxAdapter(
             child: SizedBox(

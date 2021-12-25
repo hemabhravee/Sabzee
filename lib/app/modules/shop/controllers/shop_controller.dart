@@ -12,12 +12,23 @@ class ShopController extends GetxController {
   final FocusNode searchFocusNode = new FocusNode();
   late Rx<Widget> searchField;
 
+  searchButtonHandler() {
+    print("Search Button Pressed");
+    if (actionIcon.value.icon == Icons.search) {
+      print("Search Button Pressed");
+      actionIcon.value = new Icon(Icons.close, color: Colors.white);
+      isSearching.value = true;
+    } else {
+      isSearching.value = false;
+      actionIcon.value = new Icon(Icons.search, color: Colors.white);
+      print("Exiting Search");
+    }
+  }
+
   // late RxList<MenuItem> mappedItems;
   // late Future<String> getMappedItems;
 
   final count = 0.obs;
-
-  
 
   @override
   void onInit() {
