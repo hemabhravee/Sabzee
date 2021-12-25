@@ -127,12 +127,12 @@ int getQuantityFromUid(String itemId, String variantId) {
   var homeController = Get.find<HomeController>();
   int qty = 0;
 
-  print("finding " + itemId + "-" + variantId + "  in cart");
+  // ("finding " + itemId + "-" + variantId + "  in cart");
   homeController.cart.value.items.forEach((element) {
-    print("matching against " + element.uid);
+    // print("matching against " + element.uid);
     if (element.uid == itemId + "-" + variantId) qty = element.qty;
   });
-  print("qty = " + qty.toString());
+  // print("qty = " + qty.toString());
   return qty;
 }
 

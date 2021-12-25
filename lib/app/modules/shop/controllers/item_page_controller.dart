@@ -41,27 +41,41 @@ class ItemPageController extends GetxController {
   }
 
   onSubmit() {
+    print("OnSubmit handler called");
     for (int i = 0; i < y.value.variants.length; i++) {
       var value = y.value.variants[i];
+      print("Item : " + homeController.mappedItems[index].id + "-" + value.id);
 
-      if (itemExistsInCart(homeController.mappedItems[index].id, value.id))
-        homeController.updateItemQuantity(
-          qty: quantities[i],
-          uid: y.value.id + "-" + value.id,
-        );
-      else if (quantities[i] > 0)
+      if (itemExistsInCart(homeController.mappedItems[index].id, value.id)) {
+        {
+          print("exists in cart");
+          print("Chacking for changes");
+          int q = getQuantityFromUid(
+              homeController.mappedItems[index].id, value.id);
+          if (q != quantities[i]) {
+            print("Changes found. Updating..");
+            homeController.updateItemQuantity(
+              qty: quantities[i],
+              uid: y.value.id + "-" + value.id,
+            );
+          }
+        }
+      } else if (quantities[i] > 0) {
+        print("New item with q > 0");
         homeController.addItemToCart(
           uid: homeController.mappedItems[index].id + "-" + value.id,
           qty: quantities[i],
         );
+      }
 
-      update();
+      homeController.cart.refresh();
 
       // y.value.variants.forEachIndexed((index, value) {
       //   shopController.mappedItems[index].variants[index].qty =
       //       value.qty;
       // });
     }
+    print(homeController.cart.value.items);
     // Navigator.pop(context);
     Get.back();
   }
