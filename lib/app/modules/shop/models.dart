@@ -107,6 +107,13 @@ class Cart {
   late List<CartItem> items;
 
   Cart({required this.items, required this.amount});
+  deleteItemByUid(String uid) {
+    late int index;
+    for (int i = 0; i < items.length; i++) {
+      if (uid == items[i].uid) index = i;
+    }
+    items.removeAt(index);
+  }
 }
 
 class CartItem {

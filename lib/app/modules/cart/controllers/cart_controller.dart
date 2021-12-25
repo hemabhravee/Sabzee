@@ -1,9 +1,9 @@
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
+import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
+import 'package:sabzee/app/modules/shop/models.dart';
 
 class CartController extends GetxController {
-  //TODO: Implement CartController
-
   final count = 0.obs;
   @override
   void onInit() {
