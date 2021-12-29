@@ -13,8 +13,42 @@ class ShopController extends GetxController {
   final FocusNode searchFocusNode = new FocusNode();
   late Rx<Widget> searchField;
   var homeController = Get.find<HomeController>();
-  var mappedItems = items.map((e) => MenuItem.fromJson(e)).toList();
-  late RxList<MenuItem> displayItems = mappedItems.obs;
+  late var mappedItems;
+  RxList<MenuItem> displayItems = <MenuItem>[].obs;
+
+  late RxSet<String> categories = <String>{}.obs;
+  late RxString currentCategory = "Vegetables".obs;
+
+  applyCategory(String category) {}
+
+  Future<String> getMenuItems() {
+    return Future.delayed(Duration(seconds: 0), () {
+      homeController.mappedItems.forEach((element) {
+        categories.add(element.category);
+      });
+      print(categories);
+      print(categories.elementAt(0));
+
+      mappedItems = items.map((e) => MenuItem.fromJson(e)).toList();
+
+      displayItems.value = mappedItems
+          .where((item) => item.category == currentCategory.value)
+          .toList();
+
+      return "categories & items loaded";
+    });
+  }
+
+  switchCategory(String newCategory) {
+    currentCategory.value = newCategory;
+    displayItems.value = mappedItems
+        .where((item) => item.category == currentCategory.value)
+        .toList();
+    print("new category : " + newCategory);
+  }
+
+  //mappedItems.obs;
+  //var categories = homeController;
 
   searchButtonHandler() {
     print("Search Button Pressed");
@@ -62,6 +96,7 @@ class ShopController extends GetxController {
 
   @override
   void onInit() {
+    // getMenuItems();
     //TODO: Add Cache
     // print("Fetching mapped items");
     // getMappedItems = Future<String>.delayed(const Duration(seconds: 0), () {

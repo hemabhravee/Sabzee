@@ -12,12 +12,14 @@ class MenuItem {
   late String name;
   late List<Variant> variants;
   late String id;
+  late String category;
 
   MenuItem({required this.name, required this.variants, required this.id});
 
   MenuItem.fromJson(Map<String, dynamic> json) {
     name = json['name'];
     id = json['id'];
+    category = json['category'];
     //print("MenuItem.fromJson called");
     if (json['variants'] != null) {
       //print("variants are not null, adding");
@@ -34,6 +36,7 @@ class MenuItem {
     data['name'] = this.name;
     data['variants'] = this.variants;
     data['id'] = this.id;
+    data['category'] = this.category;
     return data;
   }
 }
@@ -69,6 +72,7 @@ const items = [
   {
     "name": "BitterGourd",
     "id": "BTG",
+    "category": "Vegetables",
     "variants": [
       {"name": "250 gm", "rate": "50", "id": "weight1"},
       {"name": "500 gm", "rate": "85", "id": "weight2"},
@@ -78,6 +82,7 @@ const items = [
   {
     "name": "Potatoes",
     "id": "PTT",
+    "category": "Vegetables",
     "variants": [
       {"name": "250 gm", "rate": "10", "id": "weight1"},
       {"name": "500 gm", "rate": "18", "id": "weight2"},
@@ -87,6 +92,7 @@ const items = [
   {
     "name": "Tamatoes",
     "id": "TMT",
+    "category": "Vegetables",
     "variants": [
       {"name": "250 gm", "rate": "25", "id": "weight1"},
       {"name": "500 gm", "rate": "45", "id": "weight2"},
@@ -96,10 +102,41 @@ const items = [
   {
     "name": "Green Chilly",
     "id": "GC",
+    "category": "Vegetables",
     "variants": [
       {"name": "250 gm", "rate": "20", "id": "weight1"},
       {"name": "500 gm", "rate": "35", "id": "weight2"},
       {"name": "1kg", "rate": "65", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Red Chilly",
+    "id": "RC",
+    "category": "Vegetables",
+    "variants": [
+      {"name": "250 gm", "rate": "30", "id": "weight1"},
+      {"name": "500 gm", "rate": "55", "id": "weight2"},
+      {"name": "1kg", "rate": "100", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Onions",
+    "id": "ONI",
+    "category": "Vegetables",
+    "variants": [
+      {"name": "250 gm", "rate": "10", "id": "weight1"},
+      {"name": "500 gm", "rate": "18", "id": "weight2"},
+      {"name": "1kg", "rate": "35", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Paneer",
+    "id": "PAN",
+    "category": "Dairy",
+    "variants": [
+      {"name": "200 gm", "rate": "80", "id": "weight1"},
+      {"name": "500 gm", "rate": "225", "id": "weight2"},
+      {"name": "1kg", "rate": "400", "id": "weight3"}
     ],
   },
 ];

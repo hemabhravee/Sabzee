@@ -41,15 +41,18 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     var homeController = Get.find<HomeController>();
 
     return Container(
-      // height: Get.height,
+      height: Get.height,
       width: Get.width * 0.9,
       color: Colors.amber,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          const Image(
-            image: NetworkImage(
-                'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+          Container(
+            height: Get.height * 0.4,
+            child: const Image(
+              image: NetworkImage(
+                  'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
+            ),
           ),
           Text(itemController.y.value.name,
               style: TextStyle(
