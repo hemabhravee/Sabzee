@@ -5,7 +5,6 @@ import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
 
 class ShopController extends GetxController {
-  Rx<bool> isSearching = false.obs;
   Rx<Widget> appBarTitle =
       new Text("Shop", style: new TextStyle(color: Colors.white)).obs;
   Rx<Icon> actionIcon = new Icon(Icons.search, color: Colors.white).obs;
@@ -55,9 +54,7 @@ class ShopController extends GetxController {
     if (actionIcon.value.icon == Icons.search) {
       print("Search Button Pressed");
       actionIcon.value = new Icon(Icons.close, color: Colors.white);
-      isSearching.value = true;
     } else {
-      isSearching.value = false;
       actionIcon.value = new Icon(Icons.search, color: Colors.white);
       displayItems.value = mappedItems;
       searchController.text = "";
@@ -109,15 +106,24 @@ class ShopController extends GetxController {
       controller: searchController,
       focusNode: searchFocusNode,
       style: new TextStyle(
-        color: Colors.white,
+        color: Colors.black,
       ),
       onChanged: (query) {
         updateDisplayMenu(query);
       },
       decoration: new InputDecoration(
-          prefixIcon: new Icon(Icons.search, color: Colors.white),
-          hintText: "Search...",
-          hintStyle: new TextStyle(color: Colors.white)),
+        //prefixIcon: new Icon(Icons.search, color: Colors.white),
+        hintText: "Search...",
+        hintStyle: new TextStyle(color: Colors.black),
+        suffixIcon: IconButton(
+          icon: Icon(Icons.close),
+          onPressed: () {
+            searchController.text = "";
+            updateDisplayMenu("");
+            // searchFocusNode.unfocus();
+          },
+        ),
+      ),
     ).obs;
     super.onInit();
   }
