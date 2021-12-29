@@ -49,80 +49,81 @@ class ShopView extends GetView<ShopController> {
               onTap: () {
                 controller.searchFocusNode.unfocus();
               },
-              child: ExpandableBottomSheet(
-                persistentHeader: Container(
-                  // key: controller.containerKey,
-                  color: Colors.orange,
-                  height: Get.height * 0.03,
-                  child: Center(
-                    child: Container(
-                      height: Get.height * 0.007,
-                      width: Get.width * 0.1,
-                      color: Color.fromARGB((0.25 * 255).round(), 0, 0, 0),
-                    ),
-                  ),
-                ),
-                expandableContent: Container(
-                  height: Get.height * 0.3,
-                  width: Get.width,
-                  color: Colors.white,
-                  child: Wrap(
-                    children: [
-                      ...controller.categories.map((e) => Container(
-                            // height: Get.height * 0.05,
-                            color: Colors.lightBlue,
-                            child: Text(e),
-                          )),
-                    ],
-                  ),
-                ),
-                background: CustomScrollView(
-                  slivers: <Widget>[
-                    SliverAppBar(
-                      pinned: true,
+              child: CustomScrollView(
+                slivers: <Widget>[
+                  SliverAppBar(
+                    pinned: true,
+                    centerTitle: true,
+                    snap: true,
+                    floating: true,
+                    expandedHeight: Get.height * 0.18,
+                    collapsedHeight: Get.height * 0.12,
+                    flexibleSpace: FlexibleSpaceBar(
                       centerTitle: true,
-                      snap: true,
-                      floating: true,
-                      expandedHeight: Get.height * 0.15,
-                      collapsedHeight: Get.height * 0.10,
-                      flexibleSpace: FlexibleSpaceBar(
-                        centerTitle: true,
-                        title: Container(
-                          width: Get.width,
-                          height: Get.height * 0.1,
-                          // color: Colors.grey,
-                          child: Column(
-                            children: [
-                              Row(
-                                children: [
-                                  IconButton(
-                                    onPressed: () {
-                                      homeController.innerDrawerKey.currentState
-                                          ?.open();
-                                    },
-                                    icon: Icon(Icons.menu),
-                                  ),
-                                  Expanded(
-                                    child: Center(
-                                      child: Container(
-                                        color: Colors.white,
-                                        child: controller.searchField.value,
+                      title: Container(
+                        padding: EdgeInsets.only(
+                          top: 1,
+                        ),
+                        width: Get.width,
+                        height: Get.height * 0.1,
+                        // color: Colors.grey,
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                IconButton(
+                                  onPressed: () {
+                                    homeController.innerDrawerKey.currentState
+                                        ?.open();
+                                  },
+                                  icon: Icon(Icons.menu),
+                                ),
+                                Expanded(
+                                  child: Center(
+                                    child: Container(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: 10,
                                       ),
+                                      height: Get.height * 0.05,
+                                      decoration: BoxDecoration(
+                                        color: Get.theme.backgroundColor,
+                                        borderRadius: BorderRadius.circular(12),
+                                      ),
+                                      child: controller.searchField.value,
                                     ),
                                   ),
-                                  IconButton(
-                                    onPressed: controller.searchButtonHandler,
-                                    icon: Icon(Icons.search),
-                                  ),
-                                ],
+                                ),
+                                IconButton(
+                                  onPressed: controller.searchButtonHandler,
+                                  icon: Icon(Icons.search),
+                                ),
+                              ],
+                            ),
+                            Container(
+                              padding: EdgeInsets.only(
+                                top: 5,
                               ),
-                              Row(
+                              child: Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
                                 children: [
                                   ...controller.categories
                                       .map((category) => GestureDetector(
                                             onTap: () => controller
                                                 .switchCategory(category),
                                             child: Obx(() => Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
+                                                    color: category ==
+                                                            controller
+                                                                .currentCategory
+                                                                .value
+                                                        ? Get.theme
+                                                            .primaryColorLight
+                                                        : Colors.grey[300],
+                                                  ),
                                                   margin: EdgeInsets.symmetric(
                                                     horizontal:
                                                         Get.width * 0.005,
@@ -135,12 +136,6 @@ class ShopView extends GetView<ShopController> {
                                                   ),
                                                   height: Get.height * 0.03,
                                                   width: Get.width * 0.15,
-                                                  color: category ==
-                                                          controller
-                                                              .currentCategory
-                                                              .value
-                                                      ? Colors.blue[900]
-                                                      : Colors.grey,
                                                   child: Center(
                                                     child: Text(
                                                       category,
@@ -153,23 +148,16 @@ class ShopView extends GetView<ShopController> {
                                       .toList(),
                                 ],
                               ),
-                            ],
-                          ),
-                        ),
-                        background: FlutterLogo(),
-                      ),
-                      actions: <Widget>[],
-                    ),
-                    const SliverToBoxAdapter(
-                      child: SizedBox(
-                        height: 20,
-                        child: Center(
-                          child:
-                              Text('Scroll to see the SliverAppBar in effect.'),
+                            ),
+                          ],
                         ),
                       ),
+                      // background: FlutterLogo(),
                     ),
-                    Obx(
+                    actions: <Widget>[],
+                  ),
+                  Container(
+                    child: Obx(
                       () => SliverGrid(
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
@@ -190,22 +178,39 @@ class ShopView extends GetView<ShopController> {
                                   horizontal: 5,
                                   vertical: 15,
                                 ),
-                                color: Colors.teal[100 * ((index + 1) % 9)],
+                                margin: EdgeInsets.only(
+                                  top: 5,
+                                  left: 5,
+                                  right: 5,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: Get.theme.cardColor,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Get.theme.primaryColorLight,
+                                      offset: Offset(0.0, 1.0), //(x,y)
+                                      blurRadius: 2.0,
+                                    ),
+                                  ],
+                                ),
                                 // height: Get.height * 0.3,
                                 child: Center(
                                     child: Column(
                                   children: [
                                     Container(
-                                        height: Get.height * 0.23,
+                                        height: Get.height * 0.20,
                                         width: Get.width,
-                                        color: Colors.amber,
+                                        // color: Colors.amber,
                                         child: const Image(
                                           image: NetworkImage(
                                               'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
                                         )),
-                                    Text(controller.displayItems.value
-                                        .elementAt(index)
-                                        .name),
+                                    Text(
+                                      controller.displayItems.value
+                                          .elementAt(index)
+                                          .name,
+                                      style: Get.textTheme.headline5,
+                                    ),
                                     Text((controller.displayItems.value
                                                 .elementAt(index)
                                                 .variants
@@ -233,9 +238,9 @@ class ShopView extends GetView<ShopController> {
                           childCount: controller.displayItems.length,
                         ),
                       ),
-                    )
-                  ],
-                ),
+                    ),
+                  )
+                ],
               ),
             );
           }),

@@ -11,21 +11,25 @@ class CartController extends GetxController {
   GlobalKey<ExpandableBottomSheetState> bottomSheetKey = new GlobalKey();
   final containerKey = GlobalKey();
   var sizedBoxHeight = (Get.height * 0.03).obs;
-
-  var deliveryDate = DateTime.now().obs;
+  var initDate = DateTime.now().add(Duration(
+    days: 1,
+  ));
+  var deliveryDate = DateTime.now()
+      .add(Duration(
+        days: 1,
+      ))
+      .obs;
 
   Future<void> selectDate(BuildContext context) async {
     deliveryDate.value = await showDatePicker(
           context: context,
-          firstDate: DateTime.now().add(Duration(
-            days: 1,
-          )),
-          lastDate: DateTime.now().add(Duration(
-            days: 61,
-          )),
-          initialDate: DateTime.now().add(Duration(
-            days: 1,
-          )),
+          firstDate: initDate,
+          lastDate: initDate.add(
+            Duration(
+              days: 61,
+            ),
+          ),
+          initialDate: initDate,
           selectableDayPredicate: (DateTime date) {
             return date.weekday != DateTime.monday;
           },

@@ -10,7 +10,7 @@ dependencies:
   get: 4.5.1
   flutter: 
     sdk: flutter
-
+  flex_color_scheme: any
   intl: ^0.17.0
   expandable_bottom_sheet: ^1.1.1+1
   flutter_inner_drawer:  

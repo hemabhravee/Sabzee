@@ -90,7 +90,7 @@ const items = [
     ],
   },
   {
-    "name": "Tamatoes",
+    "name": "Tomatoes",
     "id": "TMT",
     "category": "Vegetables",
     "variants": [

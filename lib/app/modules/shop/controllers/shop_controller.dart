@@ -112,9 +112,13 @@ class ShopController extends GetxController {
         updateDisplayMenu(query);
       },
       decoration: new InputDecoration(
+        fillColor: Get.theme.backgroundColor,
         //prefixIcon: new Icon(Icons.search, color: Colors.white),
         hintText: "Search...",
-        hintStyle: new TextStyle(color: Colors.black),
+        hintStyle: new TextStyle(
+          color: Colors.black,
+        ),
+        
         suffixIcon: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {
