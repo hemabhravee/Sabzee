@@ -67,12 +67,14 @@ class ShopController extends GetxController {
 
   final count = 0.obs;
 
+
+
   updateDisplayMenu(String query) {
     print("updating display items against query : " + query);
 
     List<MenuItem> x = [];
 
-    mappedItems.forEach((element) {
+    mappedItems.forEach((MenuItem element) {
       // var y = [];
       // element.variants.forEach((element) {
       //   y.add(element.toJson());
@@ -80,7 +82,8 @@ class ShopController extends GetxController {
       // if (element.name.startsWith(query) || query == "")
       //   x.add(MenuItem.fromJson(
       //       {"name": element.name, "variants": y, "id": element.id}));
-      if (element.name.startsWith(query) || query == "") x.add(element);
+      if (element.name.toLowerCase().startsWith(query.toLowerCase()) ||
+          query == "") x.add(element);
     });
 
     displayItems.value = x;
@@ -118,7 +121,7 @@ class ShopController extends GetxController {
         hintStyle: new TextStyle(
           color: Colors.black,
         ),
-        
+
         suffixIcon: IconButton(
           icon: Icon(Icons.close),
           onPressed: () {

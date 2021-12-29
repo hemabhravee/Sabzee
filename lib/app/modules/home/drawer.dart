@@ -4,12 +4,13 @@ import 'package:sabzee/app/modules/orders/views/orders_view.dart';
 
 getDrawer(BuildContext context) {
   return Drawer(
-    elevation: 20,
+    //elevation: 20,
     child: ListView(
       children: [
-        const DrawerHeader(
+        Container(
+          height: Get.height * 0.12,
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color: Get.theme.primaryColor,
           ),
           child: Text('Menu'),
         ),

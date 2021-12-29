@@ -83,7 +83,7 @@ class ItemPageController extends GetxController {
   setIndex(int newIndex) => index = newIndex;
   initFunc() {
     y = MenuItem(
-            name: "name",
+            name: homeController.mappedItems.value[index].name,
             variants: [],
             id: homeController.mappedItems.value[index].id)
         .obs;

@@ -20,15 +20,17 @@ class HomeView extends GetView<HomeController> {
               ? InnerDrawer(
                   key: controller.innerDrawerKey,
                   swipe: false,
-                  colorTransitionChild: Colors.red, // default Color.black54
+                  colorTransitionChild:
+                      Get.theme.primaryColor, // default Color.black54
                   colorTransitionScaffold:
-                      Colors.black54, // default Color.black54
-
+                      Colors.transparent, // default Color.black54
+                  backgroundDecoration: BoxDecoration(
+                    color: Get.theme.primaryColor,
+                  ),
                   //When setting the vertical offset, be sure to use only top or bottom
-                  offset: IDOffset.only(bottom: 0.05, right: 0.0, left: 0.0),
-
+                  offset: IDOffset.only(bottom: 0.05, right: 0.5, left: 0.0),
                   // scale: IDOffset.horizontal(0.8),
-                  borderRadius: 20, // default 0
+                  borderRadius: 0, // default 0
                   leftAnimationType: InnerDrawerAnimation.quadratic,
                   leftChild:
                       getDrawer(context), // required if rightChild is not set

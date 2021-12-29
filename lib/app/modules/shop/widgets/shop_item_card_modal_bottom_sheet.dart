@@ -43,11 +43,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     return Container(
       height: Get.height,
       width: Get.width * 0.9,
-      color: Colors.amber,
+      color: Get.theme.backgroundColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Container(
+            margin: EdgeInsets.only(
+              top: Get.height * 0.05,
+            ),
             height: Get.height * 0.4,
             child: const Image(
               image: NetworkImage(
@@ -59,6 +62,18 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                 fontSize: 36,
               )),
           Container(
+            height: Get.height * 0.05,
+            decoration: BoxDecoration(
+              color: Get.theme.cardColor,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Get.theme.primaryColorLight,
+                  offset: Offset(0.0, 0.75), //(x,y)
+                  blurRadius: 1.0,
+                ),
+              ],
+            ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
@@ -77,7 +92,15 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                 // horizontal: 5,
                 ),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Get.theme.cardColor,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Get.theme.primaryColorLight,
+                  offset: Offset(0.0, 1.0), //(x,y)
+                  blurRadius: 2.0,
+                ),
+              ],
             ),
             child: ListView.builder(
                 itemCount: itemController.y.value.variants.length,
@@ -89,39 +112,81 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                     ),
                     // width: Get.width * 0.5,
                     height: Get.height * 0.05,
-                    decoration: BoxDecoration(
-                      color: Colors.lightBlue,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
+
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
-                        Text(itemController.y.value.variants[index2].name
-                            .toString()),
-                        Text(itemController.y.value.variants[index2].rate
-                            .toString()),
-                        getOutlinedButton(
-                            isAdd: false,
-                            onPressed: () => itemController.onSubtract(index2),
-                            height: Get.height),
-                        Obx(
-                          () => Text(
-                              itemController.quantities[index2].toString()),
+                        Container(
+                          // color: Colors.amber,
+                          width: Get.width * 0.20,
+                          child: Center(
+                            child: Text(itemController
+                                .y.value.variants[index2].name
+                                .toString()),
+                          ),
                         ),
-                        getOutlinedButton(
-                            isAdd: true,
-                            onPressed: () => itemController.onAdd(index2),
-                            height: Get.height),
-                        Obx(() => Text((itemController.quantities[index2] *
-                                int.parse(itemController
-                                    .y.value.variants[index2].rate))
-                            .toString())),
+                        Container(
+                          //  color: Colors.amber[100],
+                          width: Get.width * 0.10,
+                          child: Center(
+                            child: Text(itemController
+                                .y.value.variants[index2].rate
+                                .toString()),
+                          ),
+                        ),
+                        Container(
+                          //  color: Colors.amber,
+                          //width: Get.width * 0.25,
+                          child: Row(
+                            children: [
+                              Obx(() => getMinusOutlinedButton(
+                                    isAdd: false,
+                                    onPressed: () =>
+                                        itemController.onSubtract(index2),
+                                    height: Get.height,
+                                    qty:
+                                        itemController.quantities.value[index2],
+                                  )),
+                              Obx(
+                                () => Text(itemController.quantities[index2]
+                                    .toString()),
+                              ),
+                              getOutlinedButton(
+                                  isAdd: true,
+                                  onPressed: () => itemController.onAdd(index2),
+                                  height: Get.height),
+                            ],
+                          ),
+                        ),
+                        Container(
+                          width: Get.width * 0.10,
+                          //  color: Colors.amber[100],
+                          child: Center(
+                            child: Obx(() => Text(
+                                (itemController.quantities[index2] *
+                                        int.parse(itemController
+                                            .y.value.variants[index2].rate))
+                                    .toString())),
+                          ),
+                        ),
                       ],
                     ),
                   );
                 }),
           ),
           Container(
+            height: Get.height * 0.05,
+            decoration: BoxDecoration(
+              color: Get.theme.cardColor,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Get.theme.primaryColorLight,
+                  offset: Offset(0.0, 1.2), //(x,y)
+                  blurRadius: 3.0,
+                ),
+              ],
+            ),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
@@ -129,13 +194,31 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   Obx(() => Text(itemController.cost.value.toString())),
                 ]),
           ),
-          TextButton(
-            onPressed: () {
-              itemController.onSubmit();
-              // Get.back();
-            },
-            child:
-                Text(itemController.isItemNew ? "Add to Cart" : "Update Cart"),
+          Container(
+            width: Get.width,
+            decoration: BoxDecoration(
+              color: Get.theme.primaryColor,
+              // borderRadius: BorderRadius.circular(15),
+              // boxShadow: [
+              //   BoxShadow(
+              //     color: Get.theme.primaryColorLight,
+              //     offset: Offset(0.0, 1.0), //(x,y)
+              //     blurRadius: 2.0,
+              //   ),
+              // ],
+            ),
+            child: TextButton(
+              onPressed: () {
+                itemController.onSubmit();
+                // Get.back();
+              },
+              child: Text(
+                itemController.isItemNew ? "Add to Cart" : "Update Cart",
+                style: Get.textTheme.button?.copyWith(
+                  color: Get.theme.backgroundColor,
+                ),
+              ),
+            ),
           )
         ],
       ),
