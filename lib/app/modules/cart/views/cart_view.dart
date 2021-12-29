@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
@@ -185,18 +186,29 @@ class CartView extends GetView<CartController> {
                 Container(
                   alignment: Alignment.topCenter,
                   height: Get.height * 0.4,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  child: Column(
                     children: [
-                      Text("Total Cost"),
-                      Obx(() =>
-                          Text(homeController.cart.value.amount.toString())),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text("Total Cost"),
+                          Obx(
+                            () => Text(
+                                homeController.cart.value.amount.toString()),
+                          ),
+                        ],
+                      ),
+                      Text("Delivery Date"),
+                      ElevatedButton(
+                          onPressed: () => controller.selectDate(context),
+                          child: Icon(Icons.search)),
+                      Obx(
+                        () => Text(DateFormat('dd-MM-yy')
+                            .format(controller.deliveryDate.value)),
+                      ),
                     ],
                   ),
                 ),
-                Obx(() => SizedBox(
-                      height: controller.sizedBoxHeight.value,
-                    )),
               ],
             ),
           ),

@@ -73,6 +73,8 @@ class HomeController extends GetxController {
     return [name, rate];
   }
 
+
+
   @override
   void onInit() {
     // print("Fetching mapped items");

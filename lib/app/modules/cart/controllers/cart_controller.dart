@@ -4,18 +4,37 @@ import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
+import 'package:intl/intl.dart';
 
 class CartController extends GetxController {
   final count = 0.obs;
   GlobalKey<ExpandableBottomSheetState> bottomSheetKey = new GlobalKey();
   final containerKey = GlobalKey();
   var sizedBoxHeight = (Get.height * 0.03).obs;
-  
+
+  var deliveryDate = DateTime.now().obs;
+
+  Future<void> selectDate(BuildContext context) async {
+    deliveryDate.value = await showDatePicker(
+          context: context,
+          firstDate: DateTime.now().add(Duration(
+            days: 1,
+          )),
+          lastDate: DateTime.now().add(Duration(
+            days: 61,
+          )),
+          initialDate: DateTime.now().add(Duration(
+            days: 1,
+          )),
+          selectableDayPredicate: (DateTime date) {
+            return date.weekday != DateTime.monday;
+          },
+        ) ??
+        deliveryDate.value;
+  }
 
   @override
   void onInit() {
-   
-    
     super.onInit();
   }
 
