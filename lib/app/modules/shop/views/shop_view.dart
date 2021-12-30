@@ -66,8 +66,9 @@ class ShopView extends GetView<ShopController> {
                         ),
                         width: Get.width,
                         height: Get.height * 0.1,
-                        // color: Colors.grey,
+                        color: Get.theme.primaryColor,
                         child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Row(
                               children: [
@@ -103,50 +104,62 @@ class ShopView extends GetView<ShopController> {
                               padding: EdgeInsets.only(
                                 top: 5,
                               ),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceAround,
-                                children: [
-                                  ...controller.categories
-                                      .map((category) => GestureDetector(
-                                            onTap: () => controller
-                                                .switchCategory(category),
-                                            child: Obx(() => Container(
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            12),
-                                                    color: category ==
-                                                            controller
-                                                                .currentCategory
-                                                                .value
-                                                        ? Get.theme
-                                                            .primaryColorLight
-                                                        : Colors.grey[300],
-                                                  ),
-                                                  margin: EdgeInsets.symmetric(
-                                                    horizontal:
-                                                        Get.width * 0.005,
-                                                  ),
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal:
-                                                        Get.width * 0.001,
-                                                    vertical:
-                                                        Get.height * 0.005,
-                                                  ),
-                                                  height: Get.height * 0.03,
-                                                  width: Get.width * 0.15,
-                                                  child: Center(
-                                                    child: Text(
-                                                      category,
-                                                      style: TextStyle(
-                                                          fontSize: 12),
+                              color: Get.theme.primaryColor,
+                              child: Center(
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    ...controller.categories
+                                        .map((category) => GestureDetector(
+                                              onTap: () => controller
+                                                  .switchCategory(category),
+                                              child: Obx(() => Container(
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              12),
+                                                      color: category ==
+                                                              controller
+                                                                  .currentCategory
+                                                                  .value
+                                                          ? Get.theme
+                                                              .primaryColorLight
+                                                          : Colors.grey[600],
                                                     ),
-                                                  ),
-                                                )),
-                                          ))
-                                      .toList(),
-                                ],
+                                                    margin:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          Get.width * 0.005,
+                                                    ),
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal:
+                                                          Get.width * 0.001,
+                                                      vertical:
+                                                          Get.height * 0.005,
+                                                    ),
+                                                    height: Get.height * 0.03,
+                                                    width: Get.width * 0.15,
+                                                    child: Center(
+                                                      child: Text(
+                                                        category,
+                                                        style: TextStyle(
+                                                          fontSize: 12,
+                                                          color: category ==
+                                                                  controller
+                                                                      .currentCategory
+                                                                      .value
+                                                              ? Colors.white
+                                                              : Colors.black,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  )),
+                                            ))
+                                        .toList(),
+                                  ],
+                                ),
                               ),
                             ),
                           ],

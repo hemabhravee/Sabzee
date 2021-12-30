@@ -18,6 +18,11 @@ class ShopController extends GetxController {
   late RxSet<String> categories = <String>{}.obs;
   late RxString currentCategory = "Vegetables".obs;
 
+  Rx<Widget> searchFieldSuffixIcon = Container(
+    width: 0,
+    height: 0,
+  ).obs;
+
   applyCategory(String category) {}
 
   Future<String> getMenuItems() {
@@ -67,8 +72,6 @@ class ShopController extends GetxController {
 
   final count = 0.obs;
 
-
-
   updateDisplayMenu(String query) {
     print("updating display items against query : " + query);
 
@@ -96,6 +99,29 @@ class ShopController extends GetxController {
 
   @override
   void onInit() {
+    searchFocusNode.addListener(() {
+      print("focus? : " + searchFocusNode.hasFocus.toString());
+      searchFieldSuffixIcon.value = searchFocusNode.hasFocus
+          ? Container(
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.grey,
+                ),
+                onPressed: () {
+                  searchController.text = "";
+                  updateDisplayMenu("");
+                  // searchFocusNode.unfocus();
+                },
+              ),
+            )
+          : Container(
+              color: Colors.transparent,
+              height: 0,
+              width: 0,
+            );
+    });
+
     // getMenuItems();
     //TODO: Add Cache
     // print("Fetching mapped items");
@@ -105,33 +131,26 @@ class ShopController extends GetxController {
     //   return 'Data Loaded';
     // });
 
-    searchField = TextField(
-      controller: searchController,
-      focusNode: searchFocusNode,
-      style: new TextStyle(
-        color: Colors.black,
-      ),
-      onChanged: (query) {
-        updateDisplayMenu(query);
-      },
-      decoration: new InputDecoration(
-        fillColor: Get.theme.backgroundColor,
-        //prefixIcon: new Icon(Icons.search, color: Colors.white),
-        hintText: "Search...",
-        hintStyle: new TextStyle(
-          color: Colors.black,
-        ),
-
-        suffixIcon: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () {
-            searchController.text = "";
-            updateDisplayMenu("");
-            // searchFocusNode.unfocus();
+    searchField = Obx(() => TextField(
+          controller: searchController,
+          focusNode: searchFocusNode,
+          style: new TextStyle(
+            color: Colors.black,
+          ),
+          onChanged: (query) {
+            updateDisplayMenu(query);
           },
-        ),
-      ),
-    ).obs;
+          decoration: new InputDecoration(
+            fillColor: Get.theme.backgroundColor,
+            //prefixIcon: new Icon(Icons.search, color: Colors.white),
+            hintText: "Search...",
+            hintStyle: new TextStyle(
+              color: Colors.black,
+            ),
+
+            suffixIcon: searchFieldSuffixIcon.value,
+          ),
+        )).obs;
     super.onInit();
   }
 
