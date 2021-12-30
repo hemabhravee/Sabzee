@@ -9,6 +9,8 @@ import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import '../controllers/cart_controller.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 
+import 'dart:ui' as ui;
+
 class CartView extends GetView<CartController> {
   late RxList<String> item_ids = <String>[].obs,
       variant_ids = <String>[].obs,
@@ -75,112 +77,197 @@ class CartView extends GetView<CartController> {
         background: SingleChildScrollView(
           physics: NeverScrollableScrollPhysics(),
           child: Container(
-            color: Colors.grey[700],
+            //color: Colors.grey[700],
             height: Get.height,
             child: Column(
               children: [
+                Container(
+                  margin: EdgeInsets.only(top: 10),
+                  height: Get.height * 0.05,
+                  decoration: BoxDecoration(
+                    color: Get.theme.cardColor,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Get.theme.primaryColorLight,
+                        offset: Offset(0.0, 0.75), //(x,y)
+                        blurRadius: 1.0,
+                      ),
+                    ],
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      Text("Item"),
+                      Text("Rate"),
+                      Text("Quantity"),
+                      Text("Price"),
+                    ],
+                  ),
+                ),
                 Expanded(
-                  child: Container(
-                    margin: EdgeInsets.symmetric(vertical: 20),
-                    padding: EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: Colors.blueGrey,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    child: Obx(() => ListView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: homeController.cart.value.items.length,
-                        itemBuilder: (context, index) {
-                          // item_id     variant_id
-                          // item_name  variant_name  variant_rate
-                          item_ids.add("");
-                          variant_ids.add("");
-                          item_names.add("");
-                          variant_names.add("");
-                          variant_rates.add("");
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(5.0),
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 20),
+                      padding: EdgeInsets.symmetric(vertical: 10),
+                      decoration: BoxDecoration(
+                        color: Get.theme.backgroundColor,
+                        borderRadius: BorderRadius.circular(15),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey,
+                            offset: Offset(0.0, 1.0), //(x,y)
+                            blurRadius: 6.0,
+                          ),
+                        ],
+                      ),
+                      child: Obx(() => ListView.builder(
+                          scrollDirection: Axis.vertical,
+                          itemCount: homeController.cart.value.items.length,
+                          itemBuilder: (context, index) {
+                            // item_id     variant_id
+                            // item_name  variant_name  variant_rate
+                            item_ids.add("");
+                            variant_ids.add("");
+                            item_names.add("");
+                            variant_names.add("");
+                            variant_rates.add("");
 
-                          Future<String> getCartItems =
-                              Future.delayed(Duration(seconds: 0), () {
-                            var x = homeController.cart.value.items[index].uid
-                                .split("-");
-                            item_ids[index] = x[0];
-                            variant_ids[index] = x[1];
-                            homeController.mappedItems.value.forEach((curItem) {
-                              if (curItem.id == item_ids[index]) {
-                                item_names[index] = curItem.name;
-                                curItem.variants.forEach((variant) {
-                                  if (variant.id == variant_ids[index]) {
-                                    variant_names[index] = variant.name;
-                                    variant_rates[index] = variant.rate;
-                                  }
-                                });
-                              }
-                            });
-                            return "Cart Items Loaded!";
-                          });
-
-                          subtractOnPressed() {
-                            homeController.updateItemQuantity(
-                                qty:
-                                    homeController.cart.value.items[index].qty -
-                                        1,
-                                uid:
-                                    homeController.cart.value.items[index].uid);
-                            homeController.cart.refresh();
-                          }
-
-                          addOnPressed() {
-                            homeController.updateItemQuantity(
-                                qty:
-                                    homeController.cart.value.items[index].qty +
-                                        1,
-                                uid:
-                                    homeController.cart.value.items[index].uid);
-                            homeController.cart.refresh();
-                          }
-
-                          return FutureBuilder<String>(
-                              future: getCartItems,
-                              builder: (context, snapshot) {
-                                return snapshot.hasData
-                                    ? Container(
-                                        height: Get.height * 0.05,
-                                        padding: EdgeInsets.symmetric(
-                                            horizontal: 0, vertical: 0),
-                                        decoration: BoxDecoration(
-                                          color: Colors.grey,
-                                          borderRadius:
-                                              BorderRadius.circular(25),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceEvenly,
-                                          children: [
-                                            Text(item_names[index]),
-                                            Text(variant_names[index]),
-                                            Text(variant_rates[index]),
-                                            getOutlinedButton(
-                                                isAdd: false,
-                                                onPressed: subtractOnPressed,
-                                                height: Get.height),
-                                            Text(homeController
-                                                .cart.value.items[index].qty
-                                                .toString()),
-                                            getOutlinedButton(
-                                                isAdd: true,
-                                                onPressed: addOnPressed,
-                                                height: Get.height),
-                                            Text((homeController.cart.value
-                                                        .items[index].qty *
-                                                    int.parse(
-                                                        variant_rates[index]))
-                                                .toString()),
-                                          ],
-                                        ),
-                                      )
-                                    : CircularProgressIndicator();
+                            Future<String> getCartItems =
+                                Future.delayed(Duration(seconds: 0), () {
+                              var x = homeController.cart.value.items[index].uid
+                                  .split("-");
+                              item_ids[index] = x[0];
+                              variant_ids[index] = x[1];
+                              homeController.mappedItems.value
+                                  .forEach((curItem) {
+                                if (curItem.id == item_ids[index]) {
+                                  item_names[index] = curItem.name;
+                                  curItem.variants.forEach((variant) {
+                                    if (variant.id == variant_ids[index]) {
+                                      variant_names[index] = variant.name;
+                                      variant_rates[index] = variant.rate;
+                                    }
+                                  });
+                                }
                               });
-                        })),
+                              return "Cart Items Loaded!";
+                            });
+
+                            subtractOnPressed() {
+                              homeController.updateItemQuantity(
+                                  qty: homeController
+                                          .cart.value.items[index].qty -
+                                      1,
+                                  uid: homeController
+                                      .cart.value.items[index].uid);
+                              homeController.cart.refresh();
+                            }
+
+                            addOnPressed() {
+                              homeController.updateItemQuantity(
+                                  qty: homeController
+                                          .cart.value.items[index].qty +
+                                      1,
+                                  uid: homeController
+                                      .cart.value.items[index].uid);
+                              homeController.cart.refresh();
+                            }
+
+                            return FutureBuilder<String>(
+                                future: getCartItems,
+                                builder: (context, snapshot) {
+                                  return snapshot.hasData
+                                      ? Container(
+                                          height: Get.height * 0.05,
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 0, vertical: 0),
+                                          decoration: BoxDecoration(
+                                            // color: Colors.grey,
+                                            borderRadius:
+                                                BorderRadius.circular(25),
+                                          ),
+                                          child: Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceEvenly,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                // color: Colors.amber[100],
+                                                width: Get.width * 0.20,
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      item_names[index],
+                                                      style: Get
+                                                          .textTheme.bodyText1,
+                                                    ),
+                                                    Text(variant_names[index]),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                  // color: Colors.amber[100],
+                                                  width: Get.width * 0.10,
+                                                  child: Center(
+                                                    child: Text(
+                                                        variant_rates[index]),
+                                                  )),
+                                              Container(
+                                                //color: Colors.amber[100],
+                                                //width: Get.width * 0.20,
+                                                child: Row(
+                                                  children: [
+                                                    getOutlinedButton(
+                                                        isAdd: false,
+                                                        onPressed:
+                                                            subtractOnPressed,
+                                                        height: Get.height),
+                                                    Container(
+                                                      width: Get.width * 0.05,
+                                                      child: Center(
+                                                        child: Text(
+                                                            homeController
+                                                                .cart
+                                                                .value
+                                                                .items[index]
+                                                                .qty
+                                                                .toString()),
+                                                      ),
+                                                    ),
+                                                    getOutlinedButton(
+                                                        isAdd: true,
+                                                        onPressed: addOnPressed,
+                                                        height: Get.height),
+                                                  ],
+                                                ),
+                                              ),
+                                              Container(
+                                                // color: Colors.amber,
+                                                width: Get.width * 0.10,
+                                                child: Center(
+                                                  child: Text((homeController
+                                                              .cart
+                                                              .value
+                                                              .items[index]
+                                                              .qty *
+                                                          int.parse(
+                                                              variant_rates[
+                                                                  index]))
+                                                      .toString()),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        )
+                                      : Container();
+                                });
+                          })),
+                    ),
                   ),
                 ),
                 Container(
@@ -189,7 +276,7 @@ class CartView extends GetView<CartController> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           Text("Total Cost"),
                           Obx(
@@ -198,13 +285,19 @@ class CartView extends GetView<CartController> {
                           ),
                         ],
                       ),
-                      Text("Delivery Date"),
-                      ElevatedButton(
-                          onPressed: () => controller.selectDate(context),
-                          child: Icon(Icons.search)),
-                      Obx(
-                        () => Text(DateFormat('dd-MM-yy')
-                            .format(controller.deliveryDate.value)),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          Text("Delivery Date"),
+                          Obx(
+                            () => OutlinedButton(
+                              onPressed: () =>
+                                  controller.selectDate(context),
+                              child: Text(DateFormat('dd-MM-yy')
+                                  .format(controller.deliveryDate.value)),
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),

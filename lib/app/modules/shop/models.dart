@@ -139,6 +139,46 @@ const items = [
       {"name": "1kg", "rate": "400", "id": "weight3"}
     ],
   },
+  {
+    "name": "Kesar Gehu Ata",
+    "id": "KGA",
+    "category": "Flour",
+    "variants": [
+      {"name": "250 gm", "rate": "140", "id": "weight1"},
+      {"name": "500 gm", "rate": "260", "id": "weight2"},
+      {"name": "1kg", "rate": "500", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Apple",
+    "id": "APP",
+    "category": "Fruits",
+    "variants": [
+      {"name": "250 gm", "rate": "35", "id": "weight1"},
+      {"name": "500 gm", "rate": "65", "id": "weight2"},
+      {"name": "1kg", "rate": "120", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Kiwi",
+    "id": "KW",
+    "category": "Fruits",
+    "variants": [
+      {"name": "250 gm", "rate": "35", "id": "weight1"},
+      {"name": "500 gm", "rate": "65", "id": "weight2"},
+      {"name": "1kg", "rate": "120", "id": "weight3"}
+    ],
+  },
+  {
+    "name": "Musk Melon",
+    "id": "MM",
+    "category": "Fruits",
+    "variants": [
+      {"name": "250 gm", "rate": "35", "id": "weight1"},
+      {"name": "500 gm", "rate": "65", "id": "weight2"},
+      {"name": "1kg", "rate": "120", "id": "weight3"}
+    ],
+  },
 ];
 
 class Cart {

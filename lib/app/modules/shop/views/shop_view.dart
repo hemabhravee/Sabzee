@@ -60,6 +60,7 @@ class ShopView extends GetView<ShopController> {
                 controller.searchFocusNode.unfocus();
               },
               child: CustomScrollView(
+                physics: ClampingScrollPhysics(),
                 anchor: 0.01,
                 slivers: <Widget>[
                   SliverAppBar(
@@ -78,6 +79,15 @@ class ShopView extends GetView<ShopController> {
                         child: FlexibleSpaceBar(
                           centerTitle: true,
                           title: Container(
+                            // decoration: BoxDecoration(
+                            //   boxShadow: [
+                            //     BoxShadow(
+                            //       color: Colors.black12,
+                            //       offset: Offset(0.0, 1.0), //(x,y)
+                            //       blurRadius: 6.0,
+                            //     ),
+                            //   ],
+                            // ),
                             padding: EdgeInsets.only(
                               top: 1,
                             ),
@@ -120,6 +130,7 @@ class ShopView extends GetView<ShopController> {
                                   ],
                                 ),
                                 Container(
+                                  width: Get.width * 0.9,
                                   padding: EdgeInsets.only(
                                     top: 5,
                                   ),
@@ -127,7 +138,7 @@ class ShopView extends GetView<ShopController> {
                                   child: Center(
                                     child: Row(
                                       mainAxisAlignment:
-                                          MainAxisAlignment.spaceAround,
+                                          MainAxisAlignment.spaceEvenly,
                                       children: [
                                         ...controller.categories
                                             .map((category) => GestureDetector(

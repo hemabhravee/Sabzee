@@ -28,7 +28,7 @@ class HomeView extends GetView<HomeController> {
                     color: Get.theme.primaryColor,
                   ),
                   //When setting the vertical offset, be sure to use only top or bottom
-                  offset: IDOffset.only(bottom: 0.05, right: 0.5, left: 0.0),
+                  offset: IDOffset.only(bottom: 0.00, right: 0.5, left: 0.0),
                   // scale: IDOffset.horizontal(0.8),
                   borderRadius: 0, // default 0
                   leftAnimationType: InnerDrawerAnimation.quadratic,
