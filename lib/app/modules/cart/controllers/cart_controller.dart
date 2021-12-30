@@ -8,7 +8,8 @@ import 'package:intl/intl.dart';
 
 class CartController extends GetxController {
   final count = 0.obs;
-  GlobalKey<ExpandableBottomSheetState> bottomSheetKey = new GlobalKey();
+  GlobalKey<ExpandableBottomSheetState> bottomSheetKey =
+      new GlobalKey<ExpandableBottomSheetState>();
   final containerKey = GlobalKey();
   var sizedBoxHeight = (Get.height * 0.03).obs;
   var initDate = DateTime.now().add(Duration(

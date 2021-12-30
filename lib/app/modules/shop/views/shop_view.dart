@@ -8,6 +8,7 @@ import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/widgets/shop_item_card_modal_bottom_sheet.dart';
 
 import '../controllers/shop_controller.dart';
+import 'dart:ui' as ui;
 
 import 'package:sabzee/app/modules/shop/models.dart';
 
@@ -47,129 +48,154 @@ class ShopView extends GetView<ShopController> {
           builder: (context, snapshot) {
             return GestureDetector(
               onTap: () {
+                print("on Tap");
+                controller.searchFocusNode.unfocus();
+              },
+              // onVerticalDragStart: (event) {
+              //   print("vertical drag");
+              //   controller.searchFocusNode.unfocus();
+              // },
+              onHorizontalDragStart: (event) {
+                print("horizontal drag");
                 controller.searchFocusNode.unfocus();
               },
               child: CustomScrollView(
+                anchor: 0.01,
                 slivers: <Widget>[
                   SliverAppBar(
+                    backgroundColor: Colors.transparent,
                     pinned: true,
                     centerTitle: true,
+                    elevation: 10,
                     snap: true,
                     floating: true,
-                    expandedHeight: Get.height * 0.18,
+                    expandedHeight: Get.height * 0.12,
                     collapsedHeight: Get.height * 0.12,
-                    flexibleSpace: FlexibleSpaceBar(
-                      centerTitle: true,
-                      title: Container(
-                        padding: EdgeInsets.only(
-                          top: 1,
-                        ),
-                        width: Get.width,
-                        height: Get.height * 0.1,
-                        color: Get.theme.primaryColor,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                IconButton(
-                                  onPressed: () {
-                                    homeController.innerDrawerKey.currentState
-                                        ?.open();
-                                  },
-                                  icon: Icon(Icons.menu),
-                                ),
-                                Expanded(
-                                  child: Center(
-                                    child: Container(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: 10,
-                                      ),
-                                      height: Get.height * 0.05,
-                                      decoration: BoxDecoration(
-                                        color: Get.theme.backgroundColor,
-                                        borderRadius: BorderRadius.circular(12),
-                                      ),
-                                      child: controller.searchField.value,
-                                    ),
-                                  ),
-                                ),
-                                IconButton(
-                                  onPressed: controller.searchButtonHandler,
-                                  icon: Icon(Icons.search),
-                                ),
-                              ],
+                    flexibleSpace: ClipRect(
+                      child: BackdropFilter(
+                        filter:
+                            new ui.ImageFilter.blur(sigmaX: 3.0, sigmaY: 3.0),
+                        child: FlexibleSpaceBar(
+                          centerTitle: true,
+                          title: Container(
+                            padding: EdgeInsets.only(
+                              top: 1,
                             ),
-                            Container(
-                              padding: EdgeInsets.only(
-                                top: 5,
-                              ),
-                              color: Get.theme.primaryColor,
-                              child: Center(
-                                child: Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceAround,
+                            width: Get.width,
+                            height: Get.height * 0.1,
+                            // color: Get.theme.primaryColor,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Row(
                                   children: [
-                                    ...controller.categories
-                                        .map((category) => GestureDetector(
-                                              onTap: () => controller
-                                                  .switchCategory(category),
-                                              child: Obx(() => Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                      color: category ==
-                                                              controller
-                                                                  .currentCategory
-                                                                  .value
-                                                          ? Get.theme
-                                                              .primaryColorLight
-                                                          : Colors.grey[600],
-                                                    ),
-                                                    margin:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          Get.width * 0.005,
-                                                    ),
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                      horizontal:
-                                                          Get.width * 0.001,
-                                                      vertical:
-                                                          Get.height * 0.005,
-                                                    ),
-                                                    height: Get.height * 0.03,
-                                                    width: Get.width * 0.15,
-                                                    child: Center(
-                                                      child: Text(
-                                                        category,
-                                                        style: TextStyle(
-                                                          fontSize: 12,
+                                    IconButton(
+                                      onPressed: () {
+                                        homeController
+                                            .innerDrawerKey.currentState
+                                            ?.open();
+                                      },
+                                      icon: Icon(Icons.menu),
+                                    ),
+                                    Expanded(
+                                      child: Center(
+                                        child: Container(
+                                          padding: EdgeInsets.symmetric(
+                                            horizontal: 10,
+                                          ),
+                                          height: Get.height * 0.05,
+                                          decoration: BoxDecoration(
+                                            color: Get.theme.backgroundColor,
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                          ),
+                                          child: controller.searchField.value,
+                                        ),
+                                      ),
+                                    ),
+                                    IconButton(
+                                      onPressed: controller.searchButtonHandler,
+                                      icon: Icon(Icons.search),
+                                    ),
+                                  ],
+                                ),
+                                Container(
+                                  padding: EdgeInsets.only(
+                                    top: 5,
+                                  ),
+                                  // color: Get.theme.primaryColor,
+                                  child: Center(
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceAround,
+                                      children: [
+                                        ...controller.categories
+                                            .map((category) => GestureDetector(
+                                                  onTap: () => controller
+                                                      .switchCategory(category),
+                                                  child: Obx(() => Container(
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(12),
                                                           color: category ==
                                                                   controller
                                                                       .currentCategory
                                                                       .value
-                                                              ? Colors.white
-                                                              : Colors.black,
+                                                              ? Get.theme
+                                                                  .primaryColorLight
+                                                              : Colors
+                                                                  .grey[600],
                                                         ),
-                                                      ),
-                                                    ),
-                                                  )),
-                                            ))
-                                        .toList(),
-                                  ],
+                                                        margin: EdgeInsets
+                                                            .symmetric(
+                                                          horizontal:
+                                                              Get.width * 0.005,
+                                                        ),
+                                                        padding: EdgeInsets
+                                                            .symmetric(
+                                                          horizontal:
+                                                              Get.width * 0.001,
+                                                          vertical: Get.height *
+                                                              0.005,
+                                                        ),
+                                                        height:
+                                                            Get.height * 0.03,
+                                                        width: Get.width * 0.15,
+                                                        child: Center(
+                                                          child: Text(
+                                                            category,
+                                                            style: TextStyle(
+                                                              fontSize: 12,
+                                                              color: category ==
+                                                                      controller
+                                                                          .currentCategory
+                                                                          .value
+                                                                  ? Colors.white
+                                                                  : Colors
+                                                                      .black,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )),
+                                                ))
+                                            .toList(),
+                                      ],
+                                    ),
+                                  ),
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
+                          ),
+                          // background: FlutterLogo(),
                         ),
                       ),
-                      // background: FlutterLogo(),
                     ),
                     actions: <Widget>[],
                   ),
                   Container(
+                    // color: Colors.red,
                     child: Obx(
                       () => SliverGrid(
                         gridDelegate:
