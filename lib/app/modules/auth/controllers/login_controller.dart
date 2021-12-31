@@ -42,7 +42,7 @@ class LoginController extends GetxController {
     //   codeAutoRetrievalTimeout: (verificationId) async {},
     // );
 
-    result = await auth.signInWithPhoneNumber(phoneController.text);
+    result = await auth.signInWithPhoneNumber("+91" + phoneController.text);
     showLoading.value = false;
     currentState.value = MobileVerificationState.SHOW_OTP_FORM_STATE;
   }

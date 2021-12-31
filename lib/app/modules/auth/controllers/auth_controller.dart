@@ -24,25 +24,14 @@ class AuthController extends GetxController {
 
       await auth.currentUser?.getIdToken().then((token) async {
         // bool userExists = await ApiService.doesUserExist(idToken: token);
+        print("token");
         print(token);
         User user = auth.currentUser!;
-        Get.put(user, tag: 'user');
-        // if (!userExists) {
-        //   print("Signing up new user on MongoDB");
-        //   var x = ApiService.createUser(idToken: token);
-        //   print(x);
-        //   // Utils.mainAppNav.currentState!
-        //   //     .pushNamedAndRemoveUntil(Routes.INTRO_FORM1, (route) => false);
-        //   Get.off(() => IntroFormView());
-        // } else
-        //   print(firebaseAuth.currentUser);
-        // Utils.mainAppNav.currentState!.popAndPushNamed(Routes.HOME,
-        //    arguments: {"user": firebaseAuth.currentUser});
+        Get.put(user, tag: 'user', permanent: true);
         Get.offAll(() => HomeView());
-        // Get.off(() => IntroFormView(), arguments: firebaseAuth.currentUser);
+       
       });
     } else {
-      // Utils.mainAppNav.currentState!.popAndPushNamed(Routes.NUMBER_SCREEN);
       Get.offAll(() => LoginView());
     }
   }
@@ -54,7 +43,6 @@ class AuthController extends GetxController {
     auth.authStateChanges().listen((event) {
       isSignedIn.value = event != null;
     });
-    // Get.to(() => LoginView());
     super.onReady();
   }
 

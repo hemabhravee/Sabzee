@@ -11,6 +11,7 @@ customModalBottomSheet(BuildContext context, String item_ID) {
   showModalBottomSheet(
       isScrollControlled: true,
       context: context,
+      backgroundColor: Colors.transparent,
       elevation: 20,
       builder: (BuildContext context) => ModalBottomSheet(
             item_ID: item_ID,
@@ -43,10 +44,24 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
     return Container(
       height: Get.height,
       width: Get.width * 0.9,
-      color: Get.theme.backgroundColor,
+      //color: Colors.black54,
+      decoration: BoxDecoration(
+          gradient: LinearGradient(
+        begin: Alignment.topCenter,
+        end: Alignment.bottomCenter,
+        colors: [
+          Colors.black54,
+          Colors.black,
+        ],
+      )),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
+          Icon(
+            Icons.arrow_downward_rounded,
+            color: Colors.grey,
+          ),
+          // image container
           Container(
             margin: EdgeInsets.only(
               top: Get.height * 0.05,
@@ -57,33 +72,36 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                   'https://flutter.github.io/assets-for-api-docs/assets/widgets/owl.jpg'),
             ),
           ),
-          Text(itemController.y.value.name,
-              style: TextStyle(
-                fontSize: 36,
-              )),
-          Container(
-            height: Get.height * 0.05,
-            decoration: BoxDecoration(
-              color: Get.theme.cardColor,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Get.theme.primaryColorLight,
-                  offset: Offset(0.0, 0.75), //(x,y)
-                  blurRadius: 1.0,
-                ),
-              ],
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                Text("Variant"),
-                Text("Rate"),
-                Text("Quantity"),
-                Text("Price"),
-              ],
+          // Item Name
+          Text(
+            itemController.y.value.name,
+            style: Get.textTheme.headline4?.copyWith(
+              color: Colors.white,
             ),
           ),
+          // Container(
+          //   height: Get.height * 0.05,
+          //   decoration: BoxDecoration(
+          //     color: Get.theme.cardColor,
+          //     borderRadius: BorderRadius.circular(15),
+          //     boxShadow: [
+          //       BoxShadow(
+          //         color: Get.theme.primaryColorLight,
+          //         offset: Offset(0.0, 0.75), //(x,y)
+          //         blurRadius: 1.0,
+          //       ),
+          //     ],
+          //   ),
+          //   child: Row(
+          //     mainAxisAlignment: MainAxisAlignment.spaceAround,
+          //     children: [
+          //       Text("Variant"),
+          //       Text("Rate"),
+          //       Text("Quantity"),
+          //       Text("Price"),
+          //     ],
+          //   ),
+          // ),
           // Text("Choose one"),
           Container(
             height: Get.height * 0.25,
@@ -91,17 +109,17 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                 // vertical: 10,
                 // horizontal: 5,
                 ),
-            decoration: BoxDecoration(
-              color: Get.theme.cardColor,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Get.theme.primaryColorLight,
-                  offset: Offset(0.0, 1.0), //(x,y)
-                  blurRadius: 2.0,
-                ),
-              ],
-            ),
+            // decoration: BoxDecoration(
+            //   // color: Get.theme.cardColor,
+            //   borderRadius: BorderRadius.circular(15),
+            //   // boxShadow: [
+            //   //   BoxShadow(
+            //   //     // color: Get.theme.primaryColorLight,
+            //   //     offset: Offset(0.0, 1.0), //(x,y)
+            //   //     blurRadius: 2.0,
+            //   //   ),
+            //   //],
+            // ),
             child: ListView.builder(
                 itemCount: itemController.y.value.variants.length,
                 itemBuilder: (BuildContext context, int index2) {
@@ -120,21 +138,35 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           // color: Colors.amber,
                           width: Get.width * 0.20,
                           child: Center(
-                            child: Text(itemController
-                                .y.value.variants[index2].name
-                                .toString()),
+                            child: Text(
+                              itemController.y.value.variants[index2].name
+                                  .toString(),
+                              style: Get.textTheme.bodyText1?.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                         Container(
                           //  color: Colors.amber[100],
                           width: Get.width * 0.10,
                           child: Center(
-                            child: Text(itemController
-                                .y.value.variants[index2].rate
-                                .toString()),
+                            child: Text(
+                              itemController.y.value.variants[index2].rate
+                                  .toString(),
+                              style: Get.textTheme.bodyText1?.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
                           ),
                         ),
                         Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(25),
+                            border: Border.all(
+                              color: Colors.grey,
+                            ),
+                          ),
                           //  color: Colors.amber,
                           //width: Get.width * 0.25,
                           child: Row(
@@ -148,8 +180,18 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                                         itemController.quantities.value[index2],
                                   )),
                               Obx(
-                                () => Text(itemController.quantities[index2]
-                                    .toString()),
+                                () => Container(
+                                  width: Get.width * 0.05,
+                                  child: Center(
+                                    child: Text(
+                                      itemController.quantities[index2]
+                                          .toString(),
+                                      style: Get.textTheme.bodyText1?.copyWith(
+                                        color: Colors.white,
+                                      ),
+                                    ),
+                                  ),
+                                ),
                               ),
                               getOutlinedButton(
                                   isAdd: true,
@@ -163,10 +205,14 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
                           //  color: Colors.amber[100],
                           child: Center(
                             child: Obx(() => Text(
-                                (itemController.quantities[index2] *
-                                        int.parse(itemController
-                                            .y.value.variants[index2].rate))
-                                    .toString())),
+                                  (itemController.quantities[index2] *
+                                          int.parse(itemController
+                                              .y.value.variants[index2].rate))
+                                      .toString(),
+                                  style: Get.textTheme.bodyText1?.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                )),
                           ),
                         ),
                       ],
@@ -176,22 +222,32 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
           ),
           Container(
             height: Get.height * 0.05,
-            decoration: BoxDecoration(
-              color: Get.theme.cardColor,
-              borderRadius: BorderRadius.circular(15),
-              boxShadow: [
-                BoxShadow(
-                  color: Get.theme.primaryColorLight,
-                  offset: Offset(0.0, 1.2), //(x,y)
-                  blurRadius: 3.0,
-                ),
-              ],
-            ),
+            // decoration: BoxDecoration(
+            //   // color: Get.theme.cardColor,
+            //   borderRadius: BorderRadius.circular(15),
+            //   boxShadow: [
+            //     BoxShadow(
+            //       color: Get.theme.primaryColorLight,
+            //       offset: Offset(0.0, 1.2), //(x,y)
+            //       blurRadius: 3.0,
+            //     ),
+            //   ],
+            // ),
             child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
-                  Text("Total Cost"),
-                  Obx(() => Text(itemController.cost.value.toString())),
+                  Text(
+                    "Total Cost",
+                    style: Get.textTheme.bodyText1?.copyWith(
+                      color: Colors.white,
+                    ),
+                  ),
+                  Obx(() => Text(
+                        itemController.cost.value.toString(),
+                        style: Get.textTheme.bodyText1?.copyWith(
+                          color: Colors.white,
+                        ),
+                      )),
                 ]),
           ),
           Container(

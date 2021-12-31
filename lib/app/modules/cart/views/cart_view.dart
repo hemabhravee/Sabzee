@@ -220,6 +220,14 @@ class CartView extends GetView<CartController> {
                                                         variant_rates[index]),
                                                   )),
                                               Container(
+                                                height: Get.height * 0.04,
+                                                decoration: BoxDecoration(
+                                                  borderRadius:
+                                                      BorderRadius.circular(25),
+                                                  border: Border.all(
+                                                    color: Colors.grey,
+                                                  ),
+                                                ),
                                                 //color: Colors.amber[100],
                                                 //width: Get.width * 0.20,
                                                 child: Row(

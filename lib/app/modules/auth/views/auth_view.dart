@@ -7,7 +7,8 @@ import '../controllers/auth_controller.dart';
 class AuthView extends GetView<AuthController> {
   @override
   Widget build(BuildContext context) {
-    Get.put(AuthController());
+    Get.put(AuthController(), permanent: true);
+    var controller = Get.find<AuthController>();
     return Scaffold(
       appBar: AppBar(
         title: Text('AuthView'),

@@ -27,6 +27,7 @@ class LoginView extends GetView {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextField(
+                            keyboardType: TextInputType.number,
                             controller: controller.phoneController,
                             decoration:
                                 InputDecoration(hintText: "Phone Number"),
