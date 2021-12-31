@@ -379,6 +379,10 @@ class CartView extends GetView<CartController> {
                   color: Colors.red[100],
                   child: Text("Delivery Address"),
                 ),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text("add"),
+                ),
                 Container(
                   width: Get.width,
                   height: 50,

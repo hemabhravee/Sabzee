@@ -1,17 +1,21 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/auth/models.dart';
 import 'package:sabzee/app/modules/auth/views/login_view.dart';
 import 'package:sabzee/app/modules/home/views/home_view.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
+
   late User? user;
   Rx<bool> isLoading = true.obs;
   Rx<bool> isSignedIn = false.obs;
+  SabzeeUser sabzeeUser = new SabzeeUser();
 
   final count = 0.obs;
   @override
   void onInit() {
+    sabzeeUser.firebaseUser = auth.currentUser;
     user = auth.currentUser;
     print(user);
     super.onInit();
@@ -26,10 +30,9 @@ class AuthController extends GetxController {
         // bool userExists = await ApiService.doesUserExist(idToken: token);
         print("token");
         print(token);
-        User user = auth.currentUser!;
-        Get.put(user, tag: 'user', permanent: true);
+        sabzeeUser.firebaseUser = auth.currentUser!;
+
         Get.offAll(() => HomeView());
-       
       });
     } else {
       Get.offAll(() => LoginView());

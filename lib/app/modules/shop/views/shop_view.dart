@@ -157,7 +157,7 @@ class ShopView extends GetView<ShopController> {
                                                               ? Get.theme
                                                                   .primaryColorLight
                                                               : Colors
-                                                                  .grey[600],
+                                                                  .grey[500],
                                                         ),
                                                         margin: EdgeInsets
                                                             .symmetric(

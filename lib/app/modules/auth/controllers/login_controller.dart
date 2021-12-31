@@ -1,6 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
 import 'package:sabzee/app/modules/home/views/home_view.dart';
 
 enum MobileVerificationState {
@@ -16,32 +17,13 @@ class LoginController extends GetxController {
   var otpController = new TextEditingController();
   late String verificationId;
   late ConfirmationResult result;
-  var user = null;
+  //var user = null;
+  var authController = Get.find<AuthController>();
 
-  var showLoading = false.obs;
+  var showLoading = true.obs;
 
   verifyPhoneNumber() async {
     showLoading.value = true;
-    // auth.verifyPhoneNumber(
-    //   phoneNumber: phoneController.text,
-    //   verificationCompleted: (phoneAuthCredential) async {
-    //     showLoading.value = true;
-    //   },
-    //   verificationFailed: (verificationFailed) async {
-    //     showLoading.value = false;
-    //     Get.snackbar(
-    //       "Verification Failed",
-    //       verificationFailed.message.toString(),
-    //     );
-    //   },
-    //   codeSent: (verificationId, resendingToken) async {
-    //     showLoading.value = true;
-    //     currentState.value = MobileVerificationState.SHOW_OTP_FORM_STATE;
-    //     this.verificationId = verificationId;
-    //   },
-    //   codeAutoRetrievalTimeout: (verificationId) async {},
-    // );
-
     result = await auth.signInWithPhoneNumber("+91" + phoneController.text);
     showLoading.value = false;
     currentState.value = MobileVerificationState.SHOW_OTP_FORM_STATE;
@@ -51,16 +33,17 @@ class LoginController extends GetxController {
     //late var authCredential;
     showLoading.value = true;
     try {
-      result
-          .confirm(otpController.text)
-          .then((userCredential) => user = userCredential.user);
+      result.confirm(otpController.text).then((userCredential) =>
+          authController.sabzeeUser.firebaseUser = userCredential.user);
       //  authCredential = await auth.signInWithCredential(phoneAuthCredential);
     } on Exception catch (e) {
       showLoading.value = false;
-      Get.snackbar("Error", "e.message.toString()");
+      Get.snackbar("Error", e.toString());
     }
     showLoading.value = false;
-    if (user != null) Get.to(() => HomeView());
+    if (authController.sabzeeUser.firebaseUser != null)
+      authController.isSignedIn.value = true;
+    ;
   }
 
   final count = 0.obs;
@@ -71,6 +54,7 @@ class LoginController extends GetxController {
 
   @override
   void onReady() {
+    showLoading.toggle();
     super.onReady();
   }
 
