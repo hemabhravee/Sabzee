@@ -1,5 +1,7 @@
 import 'package:get/get.dart';
 
+import 'package:sabzee/app/modules/auth/bindings/auth_binding.dart';
+import 'package:sabzee/app/modules/auth/views/auth_view.dart';
 import 'package:sabzee/app/modules/cart/bindings/cart_binding.dart';
 import 'package:sabzee/app/modules/cart/views/cart_view.dart';
 import 'package:sabzee/app/modules/home/bindings/home_binding.dart';
@@ -14,7 +16,7 @@ part 'app_routes.dart';
 class AppPages {
   AppPages._();
 
-  static const INITIAL = Routes.HOME;
+  static const INITIAL = Routes.AUTH;
 
   static final routes = [
     GetPage(
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.ORDERS,
       page: () => OrdersView(),
       binding: OrdersBinding(),
+    ),
+    GetPage(
+      name: _Paths.AUTH,
+      page: () => AuthView(),
+      binding: AuthBinding(),
     ),
   ];
 }
