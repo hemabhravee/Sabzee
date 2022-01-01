@@ -32,8 +32,25 @@ class ApiProvider extends GetConnect {
     return response;
   }
 
+  // Post user address
+  Future<Response> addDeliveryAddress({required String token,required Map<String,String> body}) async {
+    print("adding token to header");
+    headers['authorizationToken'] = token;
+
+    print("sending get req to fastapi");
+    var response = await post(
+      url + '/user/address', body,
+      headers: headers,
+    );
+
+    print("response : " + response.statusCode.toString());
+    print(response.body);
+
+    return response;
+  }
+
   // Post request
-  Future<Response> createUser(Map data) => post('/users/create', {data});
+  Future<Response> createUser(Map data) => post('/user', {data});
   // Post request with File
 
   // GetSocket userMessages() {

@@ -9,7 +9,7 @@ import 'package:sabzee/app/modules/home/views/home_view.dart';
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  late User? user;
+  //late User? user;
 
   Rx<bool> isLoading = true.obs;
   Rx<bool> isSignedIn = false.obs;
@@ -21,8 +21,8 @@ class AuthController extends GetxController {
   void onInit() {
     sabzeeUser.firebaseUser = auth.currentUser;
     print("setting user in auth initState");
-    user = auth.currentUser;
-    print(user);
+    // user = auth.currentUser;
+    // print(user);
     super.onInit();
   }
 
@@ -37,18 +37,35 @@ class AuthController extends GetxController {
       // print(userDetails.statusCode);
 
       await auth.currentUser?.getIdToken().then((token) async {
-        // bool userExists = await ApiService.doesUserExist(idToken: token);
-        print("token");
         print(token);
         var userDetails = await apiProvider.getUserDetails(token);
-        //  print("User Details : " + userDetails.body.toString());
-        // print(userDetails.statusCode);
+        print("user details : " + userDetails.body.toString());
+        print(userDetails.body.runtimeType);
+        print(userDetails.body['number'].runtimeType);
+        print(userDetails.body['addresses'].runtimeType);
+        print(userDetails.body['orders'].runtimeType);
+        print(userDetails.body['defaultAddressIndex'].runtimeType);
+
+        // set data to corresponding variables
+        // number, addresses, orders, defaultAddressIndex
+        if (userDetails.body.containsKey('number'))
+          sabzeeUser.number = userDetails.body['number'];
+
+        if (userDetails.body.containsKey('addresses'))
+          sabzeeUser.addresses.value = userDetails.body['addresses'];
+
+        if (userDetails.body['orders'] != null)
+          sabzeeUser.orders.value = userDetails.body['orders'];
+
+        if (userDetails.body.containsKey('defaultAddressIndex'))
+          sabzeeUser.defaultAddressIndex.value =
+              userDetails.body['defaultAddressIndex'];
+
         if (sabzeeUser.firebaseUser == null) {
           print("saving new user");
           sabzeeUser.firebaseUser = auth.currentUser!;
         }
-        Get.offAll(HomeView());
-        //Get.offAll(() => HomeView());
+        Get.offAll(() => HomeView());
       });
       // .catchError((onError) {
       //   print(onError);

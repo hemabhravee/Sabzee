@@ -381,9 +381,19 @@ class CartView extends GetView<CartController> {
                       width: Get.width,
                       color: Colors.red[100],
                       child: authController.sabzeeUser.addresses.length != 0
-                          ? Text(authController.sabzeeUser.addresses[
-                              authController.sabzeeUser.addresses[authController
-                                  .sabzeeUser.defaultAddressIndex.value]])
+                          ? Row(
+                              children: [
+                                Text(authController
+                                    .sabzeeUser
+                                    .addresses[authController
+                                        .sabzeeUser.defaultAddressIndex.value]
+                                    .toString()),
+                                TextButton(
+                                  onPressed: () {},
+                                  child: Text('change'),
+                                ),
+                              ],
+                            )
                           : ElevatedButton(
                               child: Text("Add an address"),
                               onPressed: () {
@@ -391,10 +401,6 @@ class CartView extends GetView<CartController> {
                               },
                             ),
                     )),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Text("add"),
-                ),
                 Container(
                   width: Get.width,
                   height: 50,

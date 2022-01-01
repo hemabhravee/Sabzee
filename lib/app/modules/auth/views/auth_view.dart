@@ -17,7 +17,7 @@ class AuthView extends GetView<AuthController> {
       body: Center(
         child: controller.isLoading.value
             ? CircularProgressIndicator()
-            : controller.user == null
+            : controller.sabzeeUser.firebaseUser == null
                 ? Container()
                 : Container(),
       ),

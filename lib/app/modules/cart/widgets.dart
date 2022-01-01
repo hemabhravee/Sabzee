@@ -105,11 +105,8 @@ getAddressDetailsContainer() {
           ),
         ),
         ElevatedButton(
-          onPressed: () {
-            if (addressController.formKey.currentState!.validate()) {
-              // add address
-            }
-          },
+          onPressed: addressController.onSubmit
+          ,
           child: Text("Add address"),
         ),
       ],
