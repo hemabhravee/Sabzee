@@ -3,6 +3,8 @@ import 'package:flutter/rendering.dart';
 
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
+import 'package:sabzee/app/modules/cart/views/add_delivery_address_view.dart';
 import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
@@ -14,6 +16,7 @@ import 'dart:ui' as ui;
 import 'package:webview_flutter/webview_flutter.dart';
 
 class CartView extends GetView<CartController> {
+  var authController = Get.find<AuthController>();
   late RxList<String> item_ids = <String>[].obs,
       variant_ids = <String>[].obs,
       item_names = <String>[].obs,
@@ -373,12 +376,21 @@ class CartView extends GetView<CartController> {
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
-                Container(
-                  height: 50,
-                  width: Get.width,
-                  color: Colors.red[100],
-                  child: Text("Delivery Address"),
-                ),
+                Obx(() => Container(
+                      height: 50,
+                      width: Get.width,
+                      color: Colors.red[100],
+                      child: authController.sabzeeUser.addresses.length != 0
+                          ? Text(authController.sabzeeUser.addresses[
+                              authController.sabzeeUser.addresses[authController
+                                  .sabzeeUser.defaultAddressIndex.value]])
+                          : ElevatedButton(
+                              child: Text("Add an address"),
+                              onPressed: () {
+                                Get.to(() => AddDeliveryAddressView());
+                              },
+                            ),
+                    )),
                 ElevatedButton(
                   onPressed: () {},
                   child: Text("add"),

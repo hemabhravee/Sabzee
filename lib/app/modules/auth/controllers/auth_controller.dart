@@ -1,21 +1,26 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
+import 'package:sabzee/app/modules/api/api_provider.dart';
 import 'package:sabzee/app/modules/auth/models.dart';
 import 'package:sabzee/app/modules/auth/views/login_view.dart';
+import 'package:sabzee/app/modules/cart/views/add_delivery_address_view.dart';
 import 'package:sabzee/app/modules/home/views/home_view.dart';
 
 class AuthController extends GetxController {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   late User? user;
+
   Rx<bool> isLoading = true.obs;
   Rx<bool> isSignedIn = false.obs;
   SabzeeUser sabzeeUser = new SabzeeUser();
+  var apiProvider = ApiProvider();
 
   final count = 0.obs;
   @override
   void onInit() {
     sabzeeUser.firebaseUser = auth.currentUser;
+    print("setting user in auth initState");
     user = auth.currentUser;
     print(user);
     super.onInit();
@@ -25,15 +30,29 @@ class AuthController extends GetxController {
     if (isLoggedIn) {
       // if not signed up on MongoDB
       // sign up on MongoDB
+      // add data to mongodb
+      print("fetching user details");
+      //  var userDetails = await apiProvider.getSpotify();
+      // print("User Details : " + userDetails.body.toString());
+      // print(userDetails.statusCode);
 
       await auth.currentUser?.getIdToken().then((token) async {
         // bool userExists = await ApiService.doesUserExist(idToken: token);
         print("token");
         print(token);
-        sabzeeUser.firebaseUser = auth.currentUser!;
-
-        Get.offAll(() => HomeView());
+        var userDetails = await apiProvider.getUserDetails(token);
+        //  print("User Details : " + userDetails.body.toString());
+        // print(userDetails.statusCode);
+        if (sabzeeUser.firebaseUser == null) {
+          print("saving new user");
+          sabzeeUser.firebaseUser = auth.currentUser!;
+        }
+        Get.offAll(HomeView());
+        //Get.offAll(() => HomeView());
       });
+      // .catchError((onError) {
+      //   print(onError);
+      // });
     } else {
       Get.offAll(() => LoginView());
     }

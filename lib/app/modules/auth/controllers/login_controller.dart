@@ -33,8 +33,11 @@ class LoginController extends GetxController {
     //late var authCredential;
     showLoading.value = true;
     try {
-      result.confirm(otpController.text).then((userCredential) =>
-          authController.sabzeeUser.firebaseUser = userCredential.user);
+      result.confirm(otpController.text).then((userCredential) {
+        authController.sabzeeUser.firebaseUser = userCredential.user;
+        print("getting user data from authcredentials");
+        print(authController.sabzeeUser.firebaseUser);
+      });
       //  authCredential = await auth.signInWithCredential(phoneAuthCredential);
     } on Exception catch (e) {
       showLoading.value = false;
