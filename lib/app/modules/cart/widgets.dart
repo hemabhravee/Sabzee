@@ -14,29 +14,13 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
-            validator: (value) {
-              return value == null || value.isEmpty
-                  ? 'Please enter name'
-                  : null;
-            },
-            decoration: new InputDecoration(
-              fillColor: Get.theme.backgroundColor,
-              //prefixIcon: new Icon(Icons.search, color: Colors.white),
-              hintText: "Recipient Name*",
-              hintStyle: new TextStyle(
-                color: Colors.black,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          height: Get.height * 0.08,
-          child: TextFormField(
+            controller: addressController.line1TextController,
             validator: (value) {
               return value == null || value.isEmpty
                   ? 'Please enter house no.'
                   : null;
             },
+            //    onChanged: (val) => addressController.line1.value = val,
             decoration: new InputDecoration(
               fillColor: Get.theme.backgroundColor,
               //prefixIcon: new Icon(Icons.search, color: Colors.white),
@@ -50,6 +34,8 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
+            controller: addressController.line2TextController,
+            //   onChanged: (val) => addressController.line2.value = val,
             decoration: new InputDecoration(
               fillColor: Get.theme.backgroundColor,
               //prefixIcon: new Icon(Icons.search, color: Colors.white),
@@ -63,6 +49,8 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
+            controller: addressController.streetTextController,
+            //   onChanged: (val) => addressController.street.value = val,
             validator: (value) {
               return value == null || value.isEmpty
                   ? 'Please enter street/locality name'
@@ -81,6 +69,8 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
+            controller: addressController.pincodeTextController,
+            //  onChanged: (val) => addressController.pincode.value = val,
             decoration: new InputDecoration(
               fillColor: Get.theme.backgroundColor,
               //prefixIcon: new Icon(Icons.search, color: Colors.white),
@@ -94,6 +84,8 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
+            controller: addressController.tagTextController,
+            // onChanged: (val) => addressController.tag.value = val,
             decoration: new InputDecoration(
               fillColor: Get.theme.backgroundColor,
               //prefixIcon: new Icon(Icons.search, color: Colors.white),
@@ -105,9 +97,12 @@ getAddressDetailsContainer() {
           ),
         ),
         ElevatedButton(
-          onPressed: addressController.onSubmit
-          ,
-          child: Text("Add address"),
+          onPressed: addressController.onSubmit,
+          child: Obx(
+            () => addressController.oldTag.value == ""
+                ? Text("Add address")
+                : Text("Update"),
+          ),
         ),
       ],
     ),

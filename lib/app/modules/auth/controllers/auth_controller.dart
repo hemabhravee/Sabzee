@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/api/api_provider.dart';
@@ -39,6 +41,7 @@ class AuthController extends GetxController {
       await auth.currentUser?.getIdToken().then((token) async {
         print(token);
         var userDetails = await apiProvider.getUserDetails(token);
+
         print("user details : " + userDetails.body.toString());
         print(userDetails.body.runtimeType);
         print(userDetails.body['number'].runtimeType);
@@ -46,20 +49,52 @@ class AuthController extends GetxController {
         print(userDetails.body['orders'].runtimeType);
         print(userDetails.body['defaultAddressIndex'].runtimeType);
 
+        Map<dynamic, dynamic> userMap =
+            (userDetails.body as Map).cast<String, dynamic>();
+        print("usermap");
+        print(userMap.toString());
         // set data to corresponding variables
         // number, addresses, orders, defaultAddressIndex
-        if (userDetails.body.containsKey('number'))
-          sabzeeUser.number = userDetails.body['number'];
+        // if (userMap.containsKey('number'))
+        sabzeeUser.number = userMap['number'];
 
-        if (userDetails.body.containsKey('addresses'))
-          sabzeeUser.addresses.value = userDetails.body['addresses'];
+        // sabzeeUser.addresses.value =
+        // var x = List<Address>.from(userMap['addresses'].map((address) {
+        //   print(address.runtimeType);
+        //   print(address);
+        //   // var add = address as Map<String, String>;
+        //   // Address.fromJson(add);
+        // }));
 
-        if (userDetails.body['orders'] != null)
-          sabzeeUser.orders.value = userDetails.body['orders'];
+        sabzeeUser.addresses.value =
+            List<Address>.from(userMap['addresses'].map((address) {
+          Map<String, String> m = {};
+          m['line1'] = address['line1'];
+          m['line2'] = address['line2'];
+          m['street'] = address['street'];
+          m['pincode'] = address['pincode'];
+          m['tag'] = address['tag'];
+          // print("address");
+          // print(m);
+          // print(m.runtimeType);
+          return Address.fromJson(m);
+        }));
 
-        if (userDetails.body.containsKey('defaultAddressIndex'))
-          sabzeeUser.defaultAddressIndex.value =
-              userDetails.body['defaultAddressIndex'];
+        sabzeeUser.defaultAddressIndex.value = userMap['defaultAddressIndex'];
+
+        sabzeeUser.orders.value =
+            List<Order>.from(userMap['orders'].map((order) {
+          Map<String, String> m = {};
+          m['line1'] = order['line1'];
+          m['line2'] = order['line2'];
+          m['street'] = order['street'];
+          m['pincode'] = order['pincode'];
+          m['tag'] = order['tag'];
+          // print("address");
+          // print(m);
+          // print(m.runtimeType);
+          return Order.fromJson(m);
+        }));
 
         if (sabzeeUser.firebaseUser == null) {
           print("saving new user");

@@ -33,13 +33,36 @@ class ApiProvider extends GetConnect {
   }
 
   // Post user address
-  Future<Response> addDeliveryAddress({required String token,required Map<String,String> body}) async {
+  Future<Response> addDeliveryAddress(
+      {required String token, required Map<String, String> body}) async {
     print("adding token to header");
     headers['authorizationToken'] = token;
 
     print("sending get req to fastapi");
     var response = await post(
-      url + '/user/address', body,
+      url + '/user/address',
+      body,
+      headers: headers,
+    );
+
+    print("response : " + response.statusCode.toString());
+    print(response.body);
+
+    return response;
+  }
+
+  Future<Response> editDeliveryAddress(
+      {required String token,
+      required Map<String, String> body,
+      required String tag}) async {
+    print("adding token to header");
+    headers['authorizationToken'] = token;
+    body['oldTag'] = tag;
+
+    print("sending get req to fastapi");
+    var response = await put(
+      url + '/user/address',
+      body,
       headers: headers,
     );
 

@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
 import 'package:sabzee/app/modules/cart/views/add_delivery_address_view.dart';
+import 'package:sabzee/app/modules/cart/views/delivery_addresses_view.dart';
 import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
@@ -382,14 +383,32 @@ class CartView extends GetView<CartController> {
                       color: Colors.red[100],
                       child: authController.sabzeeUser.addresses.length != 0
                           ? Row(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Text(authController
-                                    .sabzeeUser
-                                    .addresses[authController
-                                        .sabzeeUser.defaultAddressIndex.value]
-                                    .toString()),
+                                Column(
+                                  children: [
+                                    Text(
+                                        "Deliver to " +
+                                            authController
+                                                .sabzeeUser
+                                                .addresses[authController
+                                                    .sabzeeUser
+                                                    .defaultAddressIndex
+                                                    .value]
+                                                .tag,
+                                        style: Get.textTheme.headline6),
+                                    Text(authController
+                                        .sabzeeUser
+                                        .addresses[authController.sabzeeUser
+                                            .defaultAddressIndex.value]
+                                        .street),
+                                  ],
+                                ),
                                 TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Get.to(() => DeliveryAddressesView());
+                                  },
                                   child: Text('change'),
                                 ),
                               ],

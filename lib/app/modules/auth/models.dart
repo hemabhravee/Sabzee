@@ -4,31 +4,44 @@ import 'package:firebase_auth/firebase_auth.dart';
 
 class SabzeeUser {
   late User? firebaseUser;
-  var addresses = [].obs;
-  var defaultAddressIndex = 0.obs;
-  var orders = [].obs;
-  late var number;
+  RxList<Address> addresses = <Address>[].obs;
+  RxInt defaultAddressIndex = 0.obs;
+  RxList<Order> orders = <Order>[].obs;
+  late String number;
+
+  int getAddressIndexFromTag(String tag) {
+    int index = -1;
+    for(int i=0; i< addresses.length; i++) 
+      if(addresses[i].tag == tag) index = i;
+    
+    return index;
+  }
 }
 
 class Address {
-  late String? line1;
-  late String? line2;
-  late String? street;
-  late String? pincode;
-  late String? tag;
+  late String line1;
+  late String line2;
+  late String street;
+  late String pincode;
+  late String tag;
 
-  Address({this.line1, this.line2, this.street, this.pincode, this.tag});
+  Address(
+      {required this.line1,
+      required this.line2,
+      required this.street,
+      required this.pincode,
+      required this.tag});
 
   Address.fromJson(Map<String, String> json) {
-    line1 = json['line1'];
-    line2 = json['line2'];
-    street = json['street'];
-    pincode = json['pincode'];
-    tag = json['tag'];
+    line1 = json['line1']!;
+    line2 = json['line2']!;
+    street = json['street']!;
+    pincode = json['pincode']!;
+    tag = json['tag']!;
   }
 
-  Map<String, String?> toJson() {
-    final Map<String, String?> data = new Map<String, String>();
+  Map<String, String> toJson() {
+    final Map<String, String> data = new Map<String, String>();
     data['line1'] = this.line1;
     data['line2'] = this.line2;
     data['street'] = this.street;
