@@ -58,14 +58,6 @@ class AuthController extends GetxController {
         // if (userMap.containsKey('number'))
         sabzeeUser.number = userMap['number'];
 
-        // sabzeeUser.addresses.value =
-        // var x = List<Address>.from(userMap['addresses'].map((address) {
-        //   print(address.runtimeType);
-        //   print(address);
-        //   // var add = address as Map<String, String>;
-        //   // Address.fromJson(add);
-        // }));
-
         sabzeeUser.addresses.value =
             List<Address>.from(userMap['addresses'].map((address) {
           Map<String, String> m = {};
@@ -95,6 +87,12 @@ class AuthController extends GetxController {
           // print(m.runtimeType);
           return Order.fromJson(m);
         }));
+
+        print("payment methods: " +
+            userMap['paymentMethods'].runtimeType.toString());
+
+        sabzeeUser.paymentMethods.value = List<String>.from(
+            userMap['paymentMethods'].map((paymentMethod) => paymentMethod));
 
         if (sabzeeUser.firebaseUser == null) {
           print("saving new user");

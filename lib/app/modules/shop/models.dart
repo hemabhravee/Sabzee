@@ -187,10 +187,38 @@ class Cart {
   late List<CartItem> items;
 
   Cart({required this.items, required this.amount});
-  deleteItemByUid(String uid) {
+  // deleteItemByUid(String uid) {
+  //   late int index;
+  //   for (int i = 0; i < items.length; i++) {
+  //     if (uid == items[i].uid) index = i;
+  //   }
+  //   items.removeAt(index);
+  // }
+
+   Cart.fromJson(Map<String, dynamic> json) {
+    amount = json['amount'];
+    if (json['items'] != null) {
+      items = <CartItem>[];
+      json['items'].forEach((v) {
+        items.add(new CartItem.fromJson(v));
+      });
+    }
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['amount'] = this.amount;
+    if (this.items != null) {
+      data['items'] = this.items.map((v) => v.toJson()).toList();
+    }
+    return data;
+  }
+
+  deleteItemById(String itemId, String variantId) {
     late int index;
     for (int i = 0; i < items.length; i++) {
-      if (uid == items[i].uid) index = i;
+      if (itemId == items[i].itemId && variantId == items[i].variantId)
+        index = i;
     }
     items.removeAt(index);
   }
@@ -198,9 +226,29 @@ class Cart {
 
 class CartItem {
   late int qty;
-  late String uid;
+  late String itemId;
+  late String variantId;
+  late String rate;
 
-  CartItem({required this.uid, required this.qty});
+  CartItem({required this.itemId, required this.qty, required this.variantId, required this.rate});
+
+  CartItem.fromJson(Map<String, dynamic> json) {
+    qty = json['qty'];
+    itemId = json['itemId'];
+    variantId = json['variantId'];
+    rate = json['rate'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['qty'] = this.qty;
+    data['itemId'] = this.itemId;
+    data['variantId'] = this.variantId;
+    data['rate'] = this.rate;
+    return data;
+  }
+
+
 }
 
 int getQuantityFromUid(String itemId, String variantId) {
@@ -210,7 +258,8 @@ int getQuantityFromUid(String itemId, String variantId) {
   // ("finding " + itemId + "-" + variantId + "  in cart");
   homeController.cart.value.items.forEach((element) {
     // print("matching against " + element.uid);
-    if (element.uid == itemId + "-" + variantId) qty = element.qty;
+    if (element.itemId == itemId && element.variantId == variantId)
+      qty = element.qty;
   });
   // print("qty = " + qty.toString());
   return qty;
@@ -227,5 +276,3 @@ int findItemIndexFromId(String id) {
   }
   return -1;
 }
-
-

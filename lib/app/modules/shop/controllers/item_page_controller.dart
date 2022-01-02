@@ -56,15 +56,18 @@ class ItemPageController extends GetxController {
             print("Changes found. Updating..");
             homeController.updateItemQuantity(
               qty: quantities[i],
-              uid: y.value.id + "-" + value.id,
+              itemId: y.value.id,
+              variantId: value.id,
             );
           }
         }
       } else if (quantities[i] > 0) {
         print("New item with q > 0");
         homeController.addItemToCart(
-          uid: homeController.mappedItems[index].id + "-" + value.id,
+          itemId: homeController.mappedItems[index].id,
+          variantId: value.id,
           qty: quantities[i],
+          currentRate: value.rate,
         );
       }
 

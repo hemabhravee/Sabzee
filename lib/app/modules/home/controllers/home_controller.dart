@@ -12,9 +12,9 @@ class HomeController extends GetxController {
   Rx<int> currentTab = 0.obs;
   PageController pageController = PageController();
   Rx<Cart> cart = new Cart(items: [
-    CartItem(uid: "GC-weight1", qty: 4),
-    CartItem(uid: "BTG-weight1", qty: 2),
-    CartItem(uid: "PTT-weight1", qty: 3)
+    CartItem(itemId: "GC",variantId: "weight1", qty: 4, rate: "20"),
+    CartItem(itemId: "BTG",variantId: "weight2", qty: 2, rate: "85"),
+    CartItem(itemId: "PTT",variantId: "weight3", qty: 3, rate:  "35"),
   ], amount: 210)
       .obs;
   late RxList<MenuItem> mappedItems;
@@ -25,25 +25,25 @@ class HomeController extends GetxController {
 
   deleteItemController() => Get.delete<ItemPageController>();
 
-  addItemToCart({required String uid, required int qty}) {
-    cart.value.items.add(CartItem(uid: uid, qty: qty));
-    var x = getVariantDetailsFromUID(uid);
+  addItemToCart({required String itemId, required String variantId,  required int qty, required String currentRate}) {
+    cart.value.items.add(CartItem(itemId: itemId, variantId: variantId, qty: qty, rate:currentRate));
+    var x = getVariantDetailsFromUID(itemId, variantId);
     int rate = int.parse(x[1]);
     cart.value.amount += qty * rate;
     update();
   }
 
-  updateItemQuantity({required int qty, required String uid}) {
-    var x = getVariantDetailsFromUID(uid);
+  updateItemQuantity({required int qty, required String itemId, required String variantId}) {
+    var x = getVariantDetailsFromUID(itemId, variantId);
     int rate = int.parse(x[1]);
     cart.value.items.forEach((element) {
-      if (element.uid == uid) {
+      if (element.itemId == itemId && element.variantId == variantId) {
         int diff = qty - element.qty;
         element.qty = qty;
         cart.value.amount += diff * rate;
       }
     });
-    if (qty == 0) cart.value.deleteItemByUid(uid);
+    if (qty == 0) cart.value.deleteItemById( itemId, variantId);
 
     update();
   }
@@ -55,15 +55,14 @@ class HomeController extends GetxController {
   //   update();
   // }
 
-  getVariantDetailsFromUID(String uid) {
-    var x = uid.split('-');
-    String item_id = x[0];
-    String variant_id = x[1];
+  getVariantDetailsFromUID(String itemId, String variantId) {
+   
+
     late String name, rate;
     mappedItems.forEach((item) {
-      if (item.id == item_id) {
+      if (item.id == itemId) {
         item.variants.forEach((variant) {
-          if (variant.id == variant_id) {
+          if (variant.id == variantId) {
             name = variant.name;
             rate = variant.rate;
           }

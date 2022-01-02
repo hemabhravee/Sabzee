@@ -4,6 +4,7 @@ import 'package:flutter/rendering.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
+import 'package:sabzee/app/modules/auth/models.dart';
 import 'package:sabzee/app/modules/cart/views/add_delivery_address_view.dart';
 import 'package:sabzee/app/modules/cart/views/delivery_addresses_view.dart';
 import 'package:sabzee/app/modules/common/widgets.dart';
@@ -47,14 +48,14 @@ class CartView extends GetView<CartController> {
         //callbacks (use it for example for an animation in your header)
         onIsContractedCallback: () {
           print('contracted');
-          print(controller.containerKey.globalPaintBounds.toString());
+
           var x = (843.0 - 813.1) / Get.height;
           var y = Get.height;
           print(x.toString() + " " + y.toString());
         },
         onIsExtendedCallback: () {
           print('extended');
-          print(controller.containerKey.globalPaintBounds.toString());
+
           var height = 843.0 - 813.1;
           var x = height / Get.height;
           var y = Get.height;
@@ -142,10 +143,10 @@ class CartView extends GetView<CartController> {
 
                             Future<String> getCartItems =
                                 Future.delayed(Duration(seconds: 0), () {
-                              var x = homeController.cart.value.items[index].uid
-                                  .split("-");
-                              item_ids[index] = x[0];
-                              variant_ids[index] = x[1];
+                              item_ids[index] =
+                                  homeController.cart.value.items[index].itemId;
+                              variant_ids[index] = homeController
+                                  .cart.value.items[index].variantId;
                               homeController.mappedItems.value
                                   .forEach((curItem) {
                                 if (curItem.id == item_ids[index]) {
@@ -163,21 +164,27 @@ class CartView extends GetView<CartController> {
 
                             subtractOnPressed() {
                               homeController.updateItemQuantity(
-                                  qty: homeController
-                                          .cart.value.items[index].qty -
-                                      1,
-                                  uid: homeController
-                                      .cart.value.items[index].uid);
+                                qty:
+                                    homeController.cart.value.items[index].qty -
+                                        1,
+                                itemId: homeController
+                                    .cart.value.items[index].itemId,
+                                variantId: homeController
+                                    .cart.value.items[index].variantId,
+                              );
                               homeController.cart.refresh();
                             }
 
                             addOnPressed() {
                               homeController.updateItemQuantity(
-                                  qty: homeController
-                                          .cart.value.items[index].qty +
-                                      1,
-                                  uid: homeController
-                                      .cart.value.items[index].uid);
+                                qty:
+                                    homeController.cart.value.items[index].qty +
+                                        1,
+                                itemId: homeController
+                                    .cart.value.items[index].itemId,
+                                variantId: homeController
+                                    .cart.value.items[index].variantId,
+                              );
                               homeController.cart.refresh();
                             }
 
@@ -312,6 +319,100 @@ class CartView extends GetView<CartController> {
                           ),
                         ],
                       ),
+                      Obx(() => Container(
+                            height: 50,
+                            width: Get.width,
+                            color: Colors.red[100],
+                            child: authController.sabzeeUser.addresses.length !=
+                                    0
+                                ? Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceEvenly,
+                                    children: [
+                                      Column(
+                                        children: [
+                                          Text(
+                                              "Deliver to " +
+                                                  authController
+                                                      .sabzeeUser
+                                                      .addresses[authController
+                                                          .sabzeeUser
+                                                          .defaultAddressIndex
+                                                          .value]
+                                                      .tag,
+                                              style: Get.textTheme.headline6),
+                                          Text(authController
+                                              .sabzeeUser
+                                              .addresses[authController
+                                                  .sabzeeUser
+                                                  .defaultAddressIndex
+                                                  .value]
+                                              .street),
+                                        ],
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Get.to(() => DeliveryAddressesView());
+                                        },
+                                        child: Text('change'),
+                                      ),
+                                    ],
+                                  )
+                                : ElevatedButton(
+                                    child: Text("Add an address"),
+                                    onPressed: () {
+                                      Get.to(() => AddDeliveryAddressView());
+                                    },
+                                  ),
+                          )),
+                      Container(
+                        width: Get.width,
+                        // height: 100,
+                        //  color: Colors.lightBlue,
+                        child: Container(
+                          alignment: Alignment.topCenter,
+                          // height: Get.height * 0.05,
+                          child: Column(
+                            children: [
+                              if (authController.sabzeeUser.paymentMethods
+                                  .contains('online'))
+                                Obx(
+                                  () => ListTile(
+                                    title: const Text('Online'),
+                                    leading: Radio<PaymentMethod>(
+                                      value: PaymentMethod.online,
+                                      groupValue:
+                                          controller.paymentMethod.value,
+                                      onChanged: (PaymentMethod? value) {
+                                        controller.paymentMethod.value = value!;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              if (authController.sabzeeUser.paymentMethods
+                                  .contains('cod'))
+                                Obx(
+                                  () => ListTile(
+                                    title: const Text('Cash on delivery'),
+                                    leading: Radio<PaymentMethod>(
+                                      value: PaymentMethod.cod,
+                                      groupValue:
+                                          controller.paymentMethod.value,
+                                      onChanged: (PaymentMethod? value) {
+                                        controller.paymentMethod.value = value!;
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ElevatedButton(
+                                  onPressed: controller.proceedToPayment,
+                                  child: Text("Proceed to Payment")),
+                            ],
+                          ),
+                        ),
+                      ),
                     ],
                   ),
                 ),
@@ -376,62 +477,7 @@ class CartView extends GetView<CartController> {
           child: SingleChildScrollView(
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                Obx(() => Container(
-                      height: 50,
-                      width: Get.width,
-                      color: Colors.red[100],
-                      child: authController.sabzeeUser.addresses.length != 0
-                          ? Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                              children: [
-                                Column(
-                                  children: [
-                                    Text(
-                                        "Deliver to " +
-                                            authController
-                                                .sabzeeUser
-                                                .addresses[authController
-                                                    .sabzeeUser
-                                                    .defaultAddressIndex
-                                                    .value]
-                                                .tag,
-                                        style: Get.textTheme.headline6),
-                                    Text(authController
-                                        .sabzeeUser
-                                        .addresses[authController.sabzeeUser
-                                            .defaultAddressIndex.value]
-                                        .street),
-                                  ],
-                                ),
-                                TextButton(
-                                  onPressed: () {
-                                    Get.to(() => DeliveryAddressesView());
-                                  },
-                                  child: Text('change'),
-                                ),
-                              ],
-                            )
-                          : ElevatedButton(
-                              child: Text("Add an address"),
-                              onPressed: () {
-                                Get.to(() => AddDeliveryAddressView());
-                              },
-                            ),
-                    )),
-                Container(
-                  width: Get.width,
-                  height: 50,
-                  color: Colors.blue,
-                  child: Container(
-                    alignment: Alignment.topCenter,
-                    height: Get.height * 0.05,
-                    child: ElevatedButton(
-                        onPressed: () {}, child: Text("Proceed to Payment")),
-                  ),
-                ),
-              ],
+              children: <Widget>[],
             ),
           ),
         ),
@@ -439,6 +485,5 @@ class CartView extends GetView<CartController> {
     );
   }
 }
-
 
 //var x = ;

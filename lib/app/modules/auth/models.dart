@@ -1,6 +1,7 @@
 import 'package:get/get.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:sabzee/app/modules/shop/models.dart';
 
 class SabzeeUser {
   late User? firebaseUser;
@@ -8,12 +9,13 @@ class SabzeeUser {
   RxInt defaultAddressIndex = 0.obs;
   RxList<Order> orders = <Order>[].obs;
   late String number;
+  RxList<String> paymentMethods = ['online'].obs;
 
   int getAddressIndexFromTag(String tag) {
     int index = -1;
-    for(int i=0; i< addresses.length; i++) 
-      if(addresses[i].tag == tag) index = i;
-    
+    for (int i = 0; i < addresses.length; i++)
+      if (addresses[i].tag == tag) index = i;
+
     return index;
   }
 }
@@ -51,69 +53,53 @@ class Address {
   }
 }
 
+enum PaymentStatus { paid, unpaid, cancelled }
+enum PaymentMethod { cod, online }
+
 class Order {
-  late int cost;
-  late String date;
-  late String paymentStatus;
-  late List<OrderItem> items;
+  late Cart cart;
+  late String deliveryDate;
+  late String orderDate;
+  late PaymentStatus paymentStatus;
+  late PaymentMethod paymentMethod;
+  late Address deliveryAddress;
 
   Order({
-    required this.cost,
-    required this.date,
+    required this.cart,
+    required this.deliveryDate,
+    required this.orderDate,
     required this.paymentStatus,
-    required this.items,
+    required this.paymentMethod,
+    required this.deliveryAddress,
   });
 
   Order.fromJson(Map<String, dynamic> json) {
-    cost = json['cost'];
-    date = json['date'];
-    paymentStatus = json['paymentStatus'];
-    if (json['items'] != null) {
-      items = <OrderItem>[];
-      json['items'].forEach((v) {
-        items.add(new OrderItem.fromJson(v));
-      });
-    }
+    deliveryDate = json['deliveryDate'];
+    orderDate = json['orderDate'];
+    if (json['paymentStatus'] == 'paid')
+      paymentStatus = PaymentStatus.paid;
+    else if (json['paymentStatus'] == 'unpaid')
+      paymentStatus = PaymentStatus.unpaid;
+    else if (json['paymentStatus'] == 'cancelled')
+      paymentStatus = PaymentStatus.cancelled;
+
+    paymentMethod = json['paymentMethod'] == "cod"
+        ? PaymentMethod.cod
+        : PaymentMethod.online;
+
+    deliveryAddress = Address.fromJson(json['deliveryAddress']);
+
+    cart = Cart.fromJson(json['cart']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['cost'] = this.cost;
-    data['date'] = this.date;
-    data['paymentStatus'] = this.paymentStatus;
-    if (this.items != null) {
-      data['items'] = this.items.map((v) => v.toJson()).toList();
-    }
-    return data;
-  }
-}
-
-class OrderItem {
-  late String itemId;
-  late String variantId;
-  late int qty;
-  late int rate;
-
-  OrderItem({
-    required this.itemId,
-    required this.variantId,
-    required this.qty,
-    required this.rate,
-  });
-
-  OrderItem.fromJson(Map<String, dynamic> json) {
-    itemId = json['itemId'];
-    variantId = json['variantId'];
-    qty = json['qty'];
-    rate = json['rate'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['itemId'] = this.itemId;
-    data['variantId'] = this.variantId;
-    data['qty'] = this.qty;
-    data['rate'] = this.rate;
+    data['deliveryDate'] = this.deliveryDate;
+    data['orderDate'] = this.orderDate;
+    data['paymentStatus'] = this.paymentStatus.toString().split('.')[1];
+    data['paymentMethod'] = this.paymentMethod.toString().split('.')[1];
+    data['deliveryAddress'] = this.deliveryAddress.toJson();
+    data['cart'] = this.cart.toJson();
     return data;
   }
 }
