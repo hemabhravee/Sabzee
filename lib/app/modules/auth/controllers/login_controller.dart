@@ -23,10 +23,18 @@ class LoginController extends GetxController {
   var showLoading = true.obs;
 
   verifyPhoneNumber() async {
-    showLoading.value = true;
-    result = await auth.signInWithPhoneNumber("+91" + phoneController.text);
-    showLoading.value = false;
-    currentState.value = MobileVerificationState.SHOW_OTP_FORM_STATE;
+    if (phoneController.text.length != 10) {
+      Get.snackbar("Invalid number", "Please enter a valid mobile number");
+    } else {
+      try {
+        showLoading.value = true;
+        result = await auth.signInWithPhoneNumber("+91" + phoneController.text);
+        showLoading.value = false;
+        currentState.value = MobileVerificationState.SHOW_OTP_FORM_STATE;
+      } catch (e) {
+        Get.snackbar("Error", e.toString());
+      }
+    }
   }
 
   singinWithPhoneAuthcredential() async {

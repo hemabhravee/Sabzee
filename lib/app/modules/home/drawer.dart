@@ -18,14 +18,14 @@ getDrawer(BuildContext context) {
           title: const Text('Your Profile'),
           onTap: () {
             Navigator.pop(context);
-            Get.to(OrdersView());
+            Get.to(() => OrdersView());
           },
         ),
         ListTile(
           title: const Text('Your Orders'),
           onTap: () {
             Navigator.pop(context);
-            Get.to(OrdersView());
+            Get.to(() => OrdersView());
           },
         ),
         ListTile(

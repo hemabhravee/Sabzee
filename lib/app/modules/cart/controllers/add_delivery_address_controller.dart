@@ -26,6 +26,7 @@ class AddDeliveryAddressController extends GetxController {
         "street": streetTextController.text,
         "pincode": pincodeTextController.text,
         "tag": tagTextController.text,
+        "city": "Ranchi"
       };
       print(body);
       print("requesting token");

@@ -195,7 +195,7 @@ class Cart {
   //   items.removeAt(index);
   // }
 
-   Cart.fromJson(Map<String, dynamic> json) {
+   Cart.fromJson(var json) {
     amount = json['amount'];
     if (json['items'] != null) {
       items = <CartItem>[];

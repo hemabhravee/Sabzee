@@ -407,8 +407,12 @@ class CartView extends GetView<CartController> {
                                   ),
                                 ),
                               ElevatedButton(
-                                  onPressed: controller.proceedToPayment,
-                                  child: Text("Proceed to Payment")),
+                                  onPressed: controller.onSubmit,
+                                  child: Obx(() => Text(
+                                      controller.paymentMethod.value ==
+                                              PaymentMethod.online
+                                          ? "Proceed to Payment"
+                                          : "Place Order"))),
                             ],
                           ),
                         ),

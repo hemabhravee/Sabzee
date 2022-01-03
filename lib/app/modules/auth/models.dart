@@ -8,6 +8,7 @@ class SabzeeUser {
   RxList<Address> addresses = <Address>[].obs;
   RxInt defaultAddressIndex = 0.obs;
   RxList<Order> orders = <Order>[].obs;
+  RxList<String> orderIds = <String>[].obs;
   late String number;
   RxList<String> paymentMethods = ['online'].obs;
 
@@ -24,6 +25,7 @@ class Address {
   late String line1;
   late String line2;
   late String street;
+  late String city;
   late String pincode;
   late String tag;
 
@@ -31,15 +33,19 @@ class Address {
       {required this.line1,
       required this.line2,
       required this.street,
+      this.city = "Ranchi",
       required this.pincode,
       required this.tag});
 
-  Address.fromJson(Map<String, String> json) {
+  Address.fromJson(var json) {
+    print("working??");
     line1 = json['line1']!;
     line2 = json['line2']!;
     street = json['street']!;
     pincode = json['pincode']!;
     tag = json['tag']!;
+    city = json['city']!;
+    print("yeah bitch");
   }
 
   Map<String, String> toJson() {
@@ -49,6 +55,7 @@ class Address {
     data['street'] = this.street;
     data['pincode'] = this.pincode;
     data['tag'] = this.tag;
+    data['city'] = this.city;
     return data;
   }
 }
@@ -73,7 +80,7 @@ class Order {
     required this.deliveryAddress,
   });
 
-  Order.fromJson(Map<String, dynamic> json) {
+  Order.fromJson(var json) {
     deliveryDate = json['deliveryDate'];
     orderDate = json['orderDate'];
     if (json['paymentStatus'] == 'paid')
@@ -86,10 +93,13 @@ class Order {
     paymentMethod = json['paymentMethod'] == "cod"
         ? PaymentMethod.cod
         : PaymentMethod.online;
-
+    Map<String, String> adrs = {};
+    adrs['line1'] = json['deliveryAddress']['line1'];
+    print("working so far");
     deliveryAddress = Address.fromJson(json['deliveryAddress']);
-
+    print("working again?");
     cart = Cart.fromJson(json['cart']);
+    print("Yasssssssssss");
   }
 
   Map<String, dynamic> toJson() {

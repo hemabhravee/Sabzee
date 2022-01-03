@@ -9,24 +9,30 @@ import '../controllers/orders_controller.dart';
 class OrdersView extends GetView<OrdersController> {
   @override
   Widget build(BuildContext context) {
+    Get.put(OrdersController());
     var authController = Get.find<AuthController>();
     return Scaffold(
         appBar: AppBar(
           title: Text('OrdersView'),
           centerTitle: true,
         ),
-        body: authController.sabzeeUser.orders.isEmpty
-            ? Center(
-                child: Text(
-                  'You have made no orders yet',
-                  style: TextStyle(fontSize: 20),
-                ),
-              )
-            : Center(
-                child: Text(
-                  'Orders',
-                  style: TextStyle(fontSize: 20),
-                ),
-              ));
+        body: FutureBuilder<Object>(
+            future: controller.getOrders(),
+            builder: (context, snapshot) {
+              return snapshot.hasData
+                  ? Container(
+                      child: Obx(
+                        () => ListView.builder(
+                            itemCount: controller.orders.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                child: Text(
+                                    controller.orders.value[index].orderDate),
+                              );
+                            }),
+                      ),
+                    )
+                  : CircularProgressIndicator();
+            }));
   }
 }

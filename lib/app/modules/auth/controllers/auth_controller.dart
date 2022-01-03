@@ -43,11 +43,11 @@ class AuthController extends GetxController {
         var userDetails = await apiProvider.getUserDetails(token);
 
         print("user details : " + userDetails.body.toString());
-        print(userDetails.body.runtimeType);
-        print(userDetails.body['number'].runtimeType);
-        print(userDetails.body['addresses'].runtimeType);
-        print(userDetails.body['orders'].runtimeType);
-        print(userDetails.body['defaultAddressIndex'].runtimeType);
+        // print(userDetails.body.runtimeType);
+        // print(userDetails.body['number'].runtimeType);
+        // print(userDetails.body['addresses'].runtimeType);
+        // print(userDetails.body['orders'].runtimeType);
+        // print(userDetails.body['defaultAddressIndex'].runtimeType);
 
         Map<dynamic, dynamic> userMap =
             (userDetails.body as Map).cast<String, dynamic>();
@@ -55,7 +55,7 @@ class AuthController extends GetxController {
         print(userMap.toString());
         // set data to corresponding variables
         // number, addresses, orders, defaultAddressIndex
-        // if (userMap.containsKey('number'))
+        
         sabzeeUser.number = userMap['number'];
 
         sabzeeUser.addresses.value =
@@ -66,6 +66,7 @@ class AuthController extends GetxController {
           m['street'] = address['street'];
           m['pincode'] = address['pincode'];
           m['tag'] = address['tag'];
+          m['city'] = address['city'] ?? "Ranchi";
           // print("address");
           // print(m);
           // print(m.runtimeType);
@@ -74,19 +75,22 @@ class AuthController extends GetxController {
 
         sabzeeUser.defaultAddressIndex.value = userMap['defaultAddressIndex'];
 
-        sabzeeUser.orders.value =
-            List<Order>.from(userMap['orders'].map((order) {
-          Map<String, String> m = {};
-          m['line1'] = order['line1'];
-          m['line2'] = order['line2'];
-          m['street'] = order['street'];
-          m['pincode'] = order['pincode'];
-          m['tag'] = order['tag'];
-          // print("address");
-          // print(m);
-          // print(m.runtimeType);
-          return Order.fromJson(m);
-        }));
+        sabzeeUser.orderIds.value = List<String>.from(
+            userMap['orders'].map((order) => order['orderId']));
+
+        // sabzeeUser.orders.value =
+        //     List<Order>.from(userMap['orders'].map((order) {
+        //   Map<String, String> m = {};
+        //   m['line1'] = order['line1'];
+        //   m['line2'] = order['line2'];
+        //   m['street'] = order['street'];
+        //   m['pincode'] = order['pincode'];
+        //   m['tag'] = order['tag'];
+        //   // print("address");
+        //   // print(m);
+        //   // print(m.runtimeType);
+        //   return Order.fromJson(m);
+        // }));
 
         print("payment methods: " +
             userMap['paymentMethods'].runtimeType.toString());
