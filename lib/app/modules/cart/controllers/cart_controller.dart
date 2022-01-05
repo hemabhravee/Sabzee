@@ -60,7 +60,7 @@ class CartController extends GetxController {
       Map<String, dynamic> orderMap = {};
 
       var token = await authController.sabzeeUser.firebaseUser!.getIdToken();
-      apiProvider.createNewOrder(
+      var response = await apiProvider.createNewOrder(
           token: token,
           deliveryDate:
               DateFormat('dd-MM-yy').format(deliveryDate.value).toString(),
@@ -71,6 +71,11 @@ class CartController extends GetxController {
               .value[authController.sabzeeUser.defaultAddressIndex.value]
               .toJson(),
           cart: homeController.cart.value.toJson());
+
+      print("response body");
+      print(response.body['orderId'].runtimeType);
+      print(response.body['orderId']);
+      authController.sabzeeUser.orderIds.value.add(response.body['orderId']);
 
       print(json.encode(orderMap));
       var order = Order.fromJson(orderMap);

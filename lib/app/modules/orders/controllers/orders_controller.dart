@@ -14,7 +14,10 @@ class OrdersController extends GetxController {
     List<Order> orderList = <Order>[];
     String token = await authController.sabzeeUser.firebaseUser!.getIdToken();
     print("get orders requesting");
-    Response resp = await apiProvider.getOrders(token);
+    Map<String, dynamic> body = {
+      "ids": authController.sabzeeUser.orderIds.value,
+    };
+    Response resp = await apiProvider.getOrders(token, body);
     print("completed");
     print("body");
     print(resp.body.runtimeType);
@@ -55,7 +58,8 @@ class OrdersController extends GetxController {
   }
 
   @override
-  void onReady() async {
+  void onReady() {
+    // print(authController.sabzeeUser.orderIds);
     super.onReady();
   }
 

@@ -112,12 +112,13 @@ class ApiProvider extends GetConnect {
     return response;
   }
 
-  Future<Response> getOrders(String token) async {
+  Future<Response> getOrders(String token, Map<String , dynamic> body) async {
     var response;
     headers['authorizationToken'] = token;
     try {
-      await get(
-        url + '/order/',
+      await post(
+        url + '/order/getUserOrders',
+        body,
         headers: headers,
       ).then((resp) => response = resp);
     } catch (e) {

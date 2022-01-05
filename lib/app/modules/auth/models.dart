@@ -38,14 +38,12 @@ class Address {
       required this.tag});
 
   Address.fromJson(var json) {
-    print("working??");
     line1 = json['line1']!;
     line2 = json['line2']!;
     street = json['street']!;
     pincode = json['pincode']!;
     tag = json['tag']!;
     city = json['city']!;
-    print("yeah bitch");
   }
 
   Map<String, String> toJson() {
@@ -58,6 +56,9 @@ class Address {
     data['city'] = this.city;
     return data;
   }
+
+  toString() =>
+      line1 + '\n' + line2 + '\n' + street + '\n' + city + '-' + pincode;
 }
 
 enum PaymentStatus { paid, unpaid, cancelled }
@@ -93,13 +94,9 @@ class Order {
     paymentMethod = json['paymentMethod'] == "cod"
         ? PaymentMethod.cod
         : PaymentMethod.online;
-    Map<String, String> adrs = {};
-    adrs['line1'] = json['deliveryAddress']['line1'];
-    print("working so far");
+
     deliveryAddress = Address.fromJson(json['deliveryAddress']);
-    print("working again?");
     cart = Cart.fromJson(json['cart']);
-    print("Yasssssssssss");
   }
 
   Map<String, dynamic> toJson() {

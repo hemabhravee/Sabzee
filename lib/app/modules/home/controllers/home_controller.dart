@@ -12,9 +12,9 @@ class HomeController extends GetxController {
   Rx<int> currentTab = 0.obs;
   PageController pageController = PageController();
   Rx<Cart> cart = new Cart(items: [
-    CartItem(itemId: "GC",variantId: "weight1", qty: 4, rate: "20"),
-    CartItem(itemId: "BTG",variantId: "weight2", qty: 2, rate: "85"),
-    CartItem(itemId: "PTT",variantId: "weight3", qty: 3, rate:  "35"),
+    CartItem(itemId: "GC", variantId: "weight1", qty: 4, rate: "20"),
+    CartItem(itemId: "BTG", variantId: "weight2", qty: 2, rate: "85"),
+    CartItem(itemId: "PTT", variantId: "weight3", qty: 3, rate: "35"),
   ], amount: 210)
       .obs;
   late RxList<MenuItem> mappedItems;
@@ -25,15 +25,21 @@ class HomeController extends GetxController {
 
   deleteItemController() => Get.delete<ItemPageController>();
 
-  addItemToCart({required String itemId, required String variantId,  required int qty, required String currentRate}) {
-    cart.value.items.add(CartItem(itemId: itemId, variantId: variantId, qty: qty, rate:currentRate));
+  addItemToCart(
+      {required String itemId,
+      required String variantId,
+      required int qty,
+      required String currentRate}) {
+    cart.value.items.add(CartItem(
+        itemId: itemId, variantId: variantId, qty: qty, rate: currentRate));
     var x = getVariantDetailsFromUID(itemId, variantId);
     int rate = int.parse(x[1]);
     cart.value.amount += qty * rate;
     update();
   }
 
-  updateItemQuantity({required int qty, required String itemId, required String variantId}) {
+  updateItemQuantity(
+      {required int qty, required String itemId, required String variantId}) {
     var x = getVariantDetailsFromUID(itemId, variantId);
     int rate = int.parse(x[1]);
     cart.value.items.forEach((element) {
@@ -43,7 +49,7 @@ class HomeController extends GetxController {
         cart.value.amount += diff * rate;
       }
     });
-    if (qty == 0) cart.value.deleteItemById( itemId, variantId);
+    if (qty == 0) cart.value.deleteItemById(itemId, variantId);
 
     update();
   }
@@ -56,23 +62,20 @@ class HomeController extends GetxController {
   // }
 
   getVariantDetailsFromUID(String itemId, String variantId) {
-   
-
-    late String name, rate;
+    late String variantName, rate, itemName;
     mappedItems.forEach((item) {
       if (item.id == itemId) {
+        itemName = item.name;
         item.variants.forEach((variant) {
           if (variant.id == variantId) {
-            name = variant.name;
+            variantName = variant.name;
             rate = variant.rate;
           }
         });
       }
     });
-    return [name, rate];
+    return [variantName, rate, itemName];
   }
-
-
 
   @override
   void onInit() {
