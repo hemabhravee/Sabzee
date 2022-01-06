@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
-import 'package:sabzee/app/modules/home/views/home_view.dart';
 
 enum MobileVerificationState {
   SHOW_MOBILE_FORM_STATE,
@@ -10,7 +9,7 @@ enum MobileVerificationState {
 }
 
 class LoginController extends GetxController {
-  //TODO: Implement LoginController
+  
   FirebaseAuth auth = FirebaseAuth.instance;
   var currentState = MobileVerificationState.SHOW_MOBILE_FORM_STATE.obs;
   var phoneController = new TextEditingController();

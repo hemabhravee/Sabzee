@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inner_drawer/inner_drawer.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
-import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
-import 'package:sabzee/app/modules/shop/views/shop_view.dart';
 
 class HomeController extends GetxController {
   late var user = Get.arguments;
@@ -14,8 +12,7 @@ class HomeController extends GetxController {
   Rx<Cart> cart = new Cart(items: [
     CartItem(itemId: "GC", variantId: "weight1", qty: 4, rate: "20"),
     CartItem(itemId: "BTG", variantId: "weight2", qty: 2, rate: "85"),
-    CartItem(itemId: "PTT", variantId: "weight3", qty: 3, rate: "35"),
-  ], amount: 210)
+  ], amount: 250)
       .obs;
   late RxList<MenuItem> mappedItems;
   late Future<String> getMappedItems;
@@ -52,6 +49,11 @@ class HomeController extends GetxController {
     if (qty == 0) cart.value.deleteItemById(itemId, variantId);
 
     update();
+  }
+
+  jumpToPage(int index) {
+    currentTab.value = index;
+    pageController.jumpToPage(index);
   }
 
   // incrementItemQuantity(String uid) {

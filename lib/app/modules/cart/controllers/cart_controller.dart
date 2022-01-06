@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,20 +5,23 @@ import 'package:sabzee/app/modules/api/api_provider.dart';
 import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
 import 'package:sabzee/app/modules/auth/models.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
-import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
-import 'package:sabzee/app/modules/shop/models.dart';
 import 'package:intl/intl.dart';
 
 class CartController extends GetxController {
+  double toDouble(TimeOfDay myTime) => myTime.hour + myTime.minute / 60.0;
   Rx<PaymentMethod> paymentMethod = PaymentMethod.online.obs;
   final count = 0.obs;
   GlobalKey<ExpandableBottomSheetState> bottomSheetKey =
       new GlobalKey<ExpandableBottomSheetState>();
   final containerKey = GlobalKey();
   var sizedBoxHeight = (Get.height * 0.03).obs;
-  var initDate = DateTime.now().add(Duration(
-    days: 1,
-  ));
+  var curTime;
+
+  var initDate = DateTime.now()
+      .add(Duration(
+        days: 1,
+      ))
+      .obs;
   var deliveryDate = DateTime.now()
       .add(Duration(
         days: 1,
@@ -32,15 +33,16 @@ class CartController extends GetxController {
   var apiProvider = ApiProvider();
 
   Future<void> selectDate(BuildContext context) async {
+    print(DateFormat('dd-MM-yy').format(initDate.value));
     deliveryDate.value = await showDatePicker(
           context: context,
-          firstDate: initDate,
-          lastDate: initDate.add(
+          firstDate: initDate.value,
+          lastDate: initDate.value.add(
             Duration(
               days: 61,
             ),
           ),
-          initialDate: initDate,
+          initialDate: initDate.value,
           selectableDayPredicate: (DateTime date) {
             return date.weekday != DateTime.monday;
           },
@@ -57,8 +59,6 @@ class CartController extends GetxController {
         duration: Duration(seconds: 5),
       );
     } else {
-      Map<String, dynamic> orderMap = {};
-
       var token = await authController.sabzeeUser.firebaseUser!.getIdToken();
       var response = await apiProvider.createNewOrder(
           token: token,
@@ -76,12 +76,12 @@ class CartController extends GetxController {
       print(response.body['orderId'].runtimeType);
       print(response.body['orderId']);
       authController.sabzeeUser.orderIds.value.add(response.body['orderId']);
-
-      print(json.encode(orderMap));
-      var order = Order.fromJson(orderMap);
+      print("payment method : " + paymentMethod.value.toString());
+      print(paymentMethod.value == PaymentMethod.cod);
 
       if (paymentMethod.value == PaymentMethod.cod) {
-        Get.back();
+        homeController.cart.value.clear();
+        homeController.jumpToPage(0);
       } else if (paymentMethod.value == PaymentMethod.online) {}
     }
   }
@@ -93,6 +93,17 @@ class CartController extends GetxController {
 
   @override
   void onReady() {
+    curTime = toDouble(TimeOfDay.now());
+    print(TimeOfDay.now());
+    if (curTime - 16.0 > 0) {
+      initDate.value = initDate.value.add(Duration(days: 1));
+      deliveryDate.value = initDate.value.add(Duration(days: 1));
+    }
+    print(initDate.value);
+    initDate.value.add(Duration(days: 1));
+    print(initDate.value);
+    initDate.value.add(Duration(days: 1));
+
     super.onReady();
   }
 

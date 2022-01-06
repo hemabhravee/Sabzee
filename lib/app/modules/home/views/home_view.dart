@@ -53,10 +53,7 @@ class HomeView extends GetView<HomeController> {
                       bottomNavigationBar: Obx(
                         () => BottomNavigationBar(
                           currentIndex: controller.currentTab.value,
-                          onTap: (index) {
-                            controller.currentTab.value = index;
-                            controller.pageController.jumpToPage(index);
-                          },
+                          onTap: controller.jumpToPage ,
                           items: [
                             BottomNavigationBarItem(
                               icon: Icon(Icons.shopping_bag_outlined),

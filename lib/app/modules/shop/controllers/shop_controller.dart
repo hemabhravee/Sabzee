@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
-import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
 
 class ShopController extends GetxController {

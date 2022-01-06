@@ -9,6 +9,7 @@ class AddDeliveryAddressController extends GetxController {
   var line1TextController = new TextEditingController();
   var line2TextController = new TextEditingController();
   var streetTextController = new TextEditingController();
+  var cityTextController = new TextEditingController();
   var tagTextController = new TextEditingController();
   var pincodeTextController = new TextEditingController();
   var apiProvider = new ApiProvider();
@@ -73,6 +74,7 @@ class AddDeliveryAddressController extends GetxController {
   void onReady() {
     //if (x.keyExists('oldTag')) oldTag = x['oldTag'];
     //for (var key in x) print(key);
+    cityTextController.text = "Ranchi";
     print("arguments : " + args.toString());
 
     oldTag.value = args.containsKey("oldTag") ? args['oldTag']! : "";

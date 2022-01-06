@@ -3,9 +3,7 @@ import 'package:get/get.dart';
 import 'package:sabzee/app/modules/common/widgets.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
-import 'package:sabzee/app/modules/shop/controllers/shop_controller.dart';
 import 'package:sabzee/app/modules/shop/models.dart';
-import 'package:collection/collection.dart';
 
 customModalBottomSheet(BuildContext context, String item_ID) {
   showModalBottomSheet(
@@ -279,6 +277,6 @@ class _ModalBottomSheetState extends State<ModalBottomSheet> {
         ],
       ),
     );
-    ;
+    
   }
 }

@@ -69,6 +69,21 @@ getAddressDetailsContainer() {
         Container(
           height: Get.height * 0.08,
           child: TextFormField(
+            onChanged: (val) => addressController.cityTextController.text = "Ranchi",
+            controller: addressController.cityTextController,
+            decoration: new InputDecoration(
+              fillColor: Get.theme.backgroundColor,
+              //prefixIcon: new Icon(Icons.search, color: Colors.white),
+              // hintText: "Street/Locality Name*",
+              // hintStyle: new TextStyle(
+              //   color: Colors.black,
+              // ),
+            ),
+          ),
+        ),
+        Container(
+          height: Get.height * 0.08,
+          child: TextFormField(
             controller: addressController.pincodeTextController,
             //  onChanged: (val) => addressController.pincode.value = val,
             decoration: new InputDecoration(

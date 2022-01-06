@@ -13,10 +13,7 @@ import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 import '../controllers/cart_controller.dart';
 import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 
-import 'dart:ui' as ui;
-
-import 'package:webview_flutter/webview_flutter.dart';
-
+// ignore: must_be_immutable
 class CartView extends GetView<CartController> {
   var authController = Get.find<AuthController>();
   late RxList<String> item_ids = <String>[].obs,

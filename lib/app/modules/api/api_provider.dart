@@ -1,5 +1,4 @@
 import 'package:get/get.dart';
-import 'package:sabzee/app/modules/auth/controllers/auth_controller.dart';
 
 class ApiProvider extends GetConnect {
   String url = 'http://localhost:8000';
@@ -72,6 +71,7 @@ class ApiProvider extends GetConnect {
     return response;
   }
 
+  // place new order
   Future<Response> createNewOrder({
     required String token,
     required String deliveryDate,
@@ -92,6 +92,8 @@ class ApiProvider extends GetConnect {
     body['cart'] = cart;
     body['paymentMethod'] = paymentMethod;
     body['deliveryAddress'] = address;
+    body['delivered'] = false;
+    body['cancelled'] = false;
     print(body['deliveryAddress']);
 
     print("sending get req to fastapi");
@@ -112,7 +114,7 @@ class ApiProvider extends GetConnect {
     return response;
   }
 
-  Future<Response> getOrders(String token, Map<String , dynamic> body) async {
+  Future<Response> getOrders(String token, Map<String, dynamic> body) async {
     var response;
     headers['authorizationToken'] = token;
     try {

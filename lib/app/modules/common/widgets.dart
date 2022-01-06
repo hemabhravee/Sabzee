@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 
 getOutlinedButton(
     {required bool isAdd,
@@ -38,7 +37,6 @@ getMinusOutlinedButton(
     required void Function() onPressed,
     required double height,
     required int qty}) {
-  var itemController = Get.find<ItemPageController>();
   // return OutlinedButton(
   //   child: Container(
   //       // color: Colors.red,

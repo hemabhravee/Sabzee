@@ -5,7 +5,6 @@
 //   SelectedItem({required this.name, required this.selections});
 // }
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
 
@@ -194,8 +193,12 @@ class Cart {
   //   }
   //   items.removeAt(index);
   // }
+  clear() {
+    amount = 0;
+    items = <CartItem>[];
+  }
 
-   Cart.fromJson(var json) {
+  Cart.fromJson(var json) {
     amount = json['amount'];
     if (json['items'] != null) {
       items = <CartItem>[];
@@ -230,7 +233,11 @@ class CartItem {
   late String variantId;
   late String rate;
 
-  CartItem({required this.itemId, required this.qty, required this.variantId, required this.rate});
+  CartItem(
+      {required this.itemId,
+      required this.qty,
+      required this.variantId,
+      required this.rate});
 
   CartItem.fromJson(Map<String, dynamic> json) {
     qty = json['qty'];
@@ -247,8 +254,6 @@ class CartItem {
     data['rate'] = this.rate;
     return data;
   }
-
-
 }
 
 int getQuantityFromUid(String itemId, String variantId) {

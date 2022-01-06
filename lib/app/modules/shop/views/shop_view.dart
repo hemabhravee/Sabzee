@@ -1,16 +1,12 @@
-import 'package:expandable_bottom_sheet/expandable_bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:sabzee/app/modules/home/controllers/home_controller.dart';
-import 'package:sabzee/app/modules/orders/views/orders_view.dart';
-import 'package:sabzee/app/modules/shop/controllers/item_page_controller.dart';
 import 'package:sabzee/app/modules/shop/widgets/shop_item_card_modal_bottom_sheet.dart';
 
 import '../controllers/shop_controller.dart';
 import 'dart:ui' as ui;
 
-import 'package:sabzee/app/modules/shop/models.dart';
 
 class ShopView extends GetView<ShopController> {
   @override
