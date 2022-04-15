@@ -16,6 +16,7 @@ class CartController extends GetxController {
   final containerKey = GlobalKey();
   var sizedBoxHeight = (Get.height * 0.03).obs;
   var curTime;
+  var myFormat = DateFormat('dd-MM-yy');
 
   var initDate = DateTime.now()
       .add(Duration(
@@ -59,30 +60,45 @@ class CartController extends GetxController {
         duration: Duration(seconds: 5),
       );
     } else {
-      var token = await authController.sabzeeUser.firebaseUser!.getIdToken();
-      var response = await apiProvider.createNewOrder(
-          token: token,
-          deliveryDate:
-              DateFormat('dd-MM-yy').format(deliveryDate.value).toString(),
-          orderDate: DateFormat('dd-MM-yy').format(DateTime.now()).toString(),
-          paymentStatus: "unpaid",
-          paymentMethod: paymentMethod.value.toString().split('.')[1],
-          address: authController.sabzeeUser.addresses
-              .value[authController.sabzeeUser.defaultAddressIndex.value]
-              .toJson(),
-          cart: homeController.cart.value.toJson());
+      curTime = toDouble(TimeOfDay.now());
+      print(TimeOfDay.now());
+      if (curTime - 16.0 > 0) {
+        initDate.value = DateTime.now().add(Duration(
+          days: 2,
+        ));
+        if (myFormat.format(deliveryDate.value) ==
+            myFormat.format(DateTime.now().add(Duration(
+              days: 1,
+            ))))
+          deliveryDate.value = DateTime.now().add(Duration(
+            days: 2,
+          ));
+      } else {
+        var token = await authController.sabzeeUser.firebaseUser!.getIdToken();
+        var response = await apiProvider.createNewOrder(
+            token: token,
+            deliveryDate:
+                DateFormat('dd-MM-yy').format(deliveryDate.value).toString(),
+            orderDate: DateFormat('dd-MM-yy').format(DateTime.now()).toString(),
+            paymentStatus: "unpaid",
+            paymentMethod: paymentMethod.value.toString().split('.')[1],
+            address: authController.sabzeeUser.addresses
+                .value[authController.sabzeeUser.defaultAddressIndex.value]
+                .toJson(),
+            cart: homeController.cart.value.toJson());
 
-      print("response body");
-      print(response.body['orderId'].runtimeType);
-      print(response.body['orderId']);
-      authController.sabzeeUser.orderIds.value.add(response.body['orderId']);
-      print("payment method : " + paymentMethod.value.toString());
-      print(paymentMethod.value == PaymentMethod.cod);
+        print("response body");
+        print(response.body['orderId'].runtimeType);
+        print(response.body['orderId']);
+        authController.sabzeeUser.orderIds.value.add(response.body['orderId']);
+        print("payment method : " + paymentMethod.value.toString());
+        print(paymentMethod.value == PaymentMethod.cod);
 
-      if (paymentMethod.value == PaymentMethod.cod) {
-        homeController.cart.value.clear();
-        homeController.jumpToPage(0);
-      } else if (paymentMethod.value == PaymentMethod.online) {}
+        if (paymentMethod.value == PaymentMethod.cod) {
+          homeController.cart.value.clear();
+          homeController.jumpToPage(0);
+        } else if (paymentMethod.value == PaymentMethod.online) {}
+      }
     }
   }
 

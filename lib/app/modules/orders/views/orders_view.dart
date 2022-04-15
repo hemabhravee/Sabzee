@@ -128,6 +128,10 @@ class OrdersView extends GetView<OrdersController> {
                                                   child: Text("pay now"),
                                                   onPressed: () {},
                                                 ),
+                                              TextButton(
+                                                child: Text("cancel order"),
+                                                onPressed: () {},
+                                              ),
                                             ],
                                           ),
                                         ),
